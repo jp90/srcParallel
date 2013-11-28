@@ -13,16 +13,29 @@
 #include "derivatives.h"
 #include "computation.h"
 #include "solver.h"
-
+#include <mpi.h>
+#include <unistd.h>
 using namespace std;
 
 int main() {
-	char input[] = "./src/inputvals.txt";
-	char output[] = "./src/inputvals.txt";
+	char input[] = "./srcParallel/inputvals.txt";
+	char output[] = "./srcParallel/inputvals.txt";
 	IO SimIO(input, output);
 
 	IndexType n = 0;
 	RealType t = 0.0;
+
+	MPI_Init(NULL,NULL);
+	int world_rank;
+	MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+	//PARA:
+	SimIO.para.iMax = SimIO.para.iMax/2;
+	SimIO.para.world_rank = world_rank;
+
+
+
+
+
 
 	//initialize u,v,p
 	MultiIndexType begin, end;
@@ -33,7 +46,7 @@ int main() {
 	end[1] = SimIO.para.jMax;
 	GridFunction u(SimIO.para.iMax+2, SimIO.para.jMax+2);
 	u.SetGridFunction(begin, end, SimIO.para.ui);
-	//Initialize v-velocity
+    //Initialize v-velocity
 	GridFunction v(SimIO.para.iMax+2, SimIO.para.jMax+2);
 	begin[0] = 1;
 	end[0] = SimIO.para.iMax;
@@ -48,6 +61,11 @@ int main() {
 	end[1] = SimIO.para.jMax;
 	p.SetGridFunction(begin, end, SimIO.para.pi);
 
+
+
+
+
+
 	GridFunction gx(u.griddimension);
 	GridFunction gy(v.griddimension);
 
@@ -55,6 +73,8 @@ int main() {
 	GridFunction g(v.griddimension);
 
 	GridFunction rhs(p.griddimension);
+
+
 
 	Computation computer(SimIO);
 	Solver solve(SimIO);
@@ -66,11 +86,16 @@ int main() {
 	delta[1]=SimIO.para.deltaY;
 	//Start Main Loop
 
+
+
 	computer.setBoundaryU(u);
-    computer.setBoundaryV(v);
+	computer.setBoundaryV(v);
+
+
+
     GridFunction ableitung(u.griddimension);
     Uyy(ableitung,u,delta);
-    u.Grid_Print();
+
     ableitung.Grid_Print();
 
 
@@ -85,11 +110,18 @@ int count=0;
 		RealType uMax = u.MaxValueGridFunction(begin, end);
 		RealType vMax = v.MaxValueGridFunction(begin, end);
 		RealType deltaT = computer.computeTimesstep(uMax, vMax);
+
+		double deltaTmin;
+
+		MPI_Reduce(&deltaT,&deltaTmin,1,MPI_DOUBLE, MPI_MIN, 0, MPI_COMM_WORLD);
+		MPI_Bcast(&deltaTmin,1,MPI_DOUBLE,0,MPI_COMM_WORLD);
+//		cout << deltaT<<endl;
+		cout << deltaTmin<<endl;
 		// set boundary values
 		computer.setBoundaryU(u);
 		computer.setBoundaryV(v);
 		// Compute F and G
-		computer.computeMomentumEquations(f, g, u, v, gx, gy, deltaT);
+		computer.computeMomentumEquations(f, g, u, v, gx, gy, deltaTmin);
 
 		computer.setBoundaryF(f,u);
 		computer.setBoundaryG(g,v);
@@ -110,7 +142,7 @@ int count=0;
 
 
 		// set right hand side of p equation
-		computer.computeRighthandSide(rhs,f,g,deltaT);
+		computer.computeRighthandSide(rhs,f,g,deltaTmin);
 	//	rhs.Grid_Print();
 		//SOR-SOLVER
 		int it =0;
@@ -123,9 +155,9 @@ int count=0;
             solve.SORCycle(p,rhs);
 
 			Residuum = solve.computeResidual(p,rhs);
-			cout << "Current Residuum: ";
-			cout << Residuum<<endl;
-			cout << "it= "<<it << "n="<<n<< endl;
+		//	cout << "Current Residuum: ";
+		//	cout << Residuum<<endl;
+		//	cout << "it= "<<it << "n="<<n<< endl;
 			it++;
 		}
 		if (Residuum>10.0)
@@ -134,9 +166,10 @@ int count=0;
 		// Update velocites u and v
 		computer.computeNewVelocities(u, v, f, g, p, deltaT);
 		n++;
-		cout << "t= " << t<< endl;
-		t += deltaT;
+	//	cout << "t= " << t<< endl;
+		t += deltaTmin;
 		count++;
 	}
 	cout << "laeuft!";
+	MPI_Finalize();
 }

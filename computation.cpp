@@ -154,7 +154,7 @@ void Computation::setBoundaryU(GridFunction& u) {
 
 	// u_i,jMax+1
 	begin[0] = 1;
-	end[0] = u.griddimension[1] - 2;
+	end[0] = u.griddimension[0] - 2;
 	begin[1] = u.griddimension[1] - 1;
 	end[1] = u.griddimension[1] - 1;
 	Offset[0] = 0;
@@ -175,7 +175,7 @@ void Computation::setBoundaryV(GridFunction& v) {
 
 	// v_i,jMax =0
 	begin[0] = 1;
-	end[0] = v.griddimension[1] - 2;
+	end[0] = v.griddimension[0] - 2;
 	begin[1] = v.griddimension[1] - 2;
 	end[1] = v.griddimension[1] - 2;
 	v.SetGridFunction(begin, end, 0.0);
