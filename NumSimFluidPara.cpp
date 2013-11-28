@@ -115,8 +115,7 @@ int count=0;
 
 		MPI_Reduce(&deltaT,&deltaTmin,1,MPI_DOUBLE, MPI_MIN, 0, MPI_COMM_WORLD);
 		MPI_Bcast(&deltaTmin,1,MPI_DOUBLE,0,MPI_COMM_WORLD);
-//		cout << deltaT<<endl;
-		cout << deltaTmin<<endl;
+
 		// set boundary values
 		computer.setBoundaryU(u);
 		computer.setBoundaryV(v);
@@ -152,7 +151,9 @@ int count=0;
             //Set boundary
             computer.setBoundaryP(p);
             // SOR Cycle
-            solve.SORCycle(p,rhs);
+            solve.SORCycle_Black(p,rhs);
+        	void ExchangePValues(p);
+            solve.SORCycle_White(p,rhs);
 
 			Residuum = solve.computeResidual(p,rhs);
 		//	cout << "Current Residuum: ";
@@ -164,7 +165,7 @@ int count=0;
 			return 0;
 
 		// Update velocites u and v
-		computer.computeNewVelocities(u, v, f, g, p, deltaT);
+		computer.computeNewVelocities(u, v, f, g, p, deltaTmin);
 		n++;
 	//	cout << "t= " << t<< endl;
 		t += deltaTmin;
