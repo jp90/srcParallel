@@ -39,6 +39,14 @@ public:
 			GridFunctionType  u, GridFunctionType  v, GridFunctionType  p,
 			const PointType & delta, int step);
 
+	void writeVTKMasterfile(const MultiIndexType & griddimension,
+				GridFunctionType  u, GridFunctionType  v, GridFunctionType  p,
+				const PointType & delta, int step);
+
+	void writeVTKSlavefile(const MultiIndexType & griddimension,
+				GridFunctionType  u, GridFunctionType  v, GridFunctionType  p,
+				const PointType & delta, int world_rank, int d);
+
 	simparam para;
 
 private:
