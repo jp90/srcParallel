@@ -35,17 +35,17 @@ public:
 	 * \param delta The mesh width in x direction and y direction
 	 * \param step The number of the timestep.
 	 */
-
-	void writeVTKMasterfile(const MultiIndexType & griddimension,
-			GridFunctionType  u, GridFunctionType  v, GridFunctionType  p,
-			const PointType & delta, int step);
-	void writeVTKSlavefile(const MultiIndexType & griddimension,
-				GridFunctionType  u, GridFunctionType  v, GridFunctionType  p,
-				const PointType & delta, int step);
-
 	void writeVTKFile(const MultiIndexType & griddimension,
 			GridFunctionType  u, GridFunctionType  v, GridFunctionType  p,
 			const PointType & delta, int step);
+
+	void writeVTKMasterfile(const MultiIndexType & griddimension,
+				GridFunctionType  u, GridFunctionType  v, GridFunctionType  p,
+				const PointType & delta, int step);
+
+	void writeVTKSlavefile(const MultiIndexType & griddimension,
+				GridFunctionType  u, GridFunctionType  v, GridFunctionType  p,
+				const PointType & delta, int world_rank, int d);
 
 	simparam para;
 
