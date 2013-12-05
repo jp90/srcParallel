@@ -301,18 +301,18 @@ void IO::writeVTKMasterfile(const 	MultiIndexType & griddimension,
 	<< " " << "0" << " " << (jMax - 1) << " " << "0" << " " << "0"
 	<< " " << "\" GhostLevel=\"" << "1" << "\">" << std::endl
 	<< "<PCoordinates>" << std::endl
-	<< "<PDataArray type=\"Float64\">" << std::endl
-	<< "<PDataArray type=\"Float64\">" << std::endl
-	<< "<PDataArray type=\"Float64\">" << std::endl
+	<< "<PDataArray type=\"Float64\"/>" << std::endl
+	<< "<PDataArray type=\"Float64\"/>" << std::endl
+	<< "<PDataArray type=\"Float64\"/>" << std::endl
 	<< "</PCoordinates>" << std::endl
 	<< "<Piece Extent=\"" << x1 << " " << x2 << " " << x3 << " " << x4 << " " << "0" << " " << "0"
-	<< " " << "\" Source=\"" << "solution_processor_0.vtr" << "\">" << std::endl
+	<< " " << "\" Source=\"" << "solution_processor_0_" << step << ".vtr" << "\"/>" << std::endl
 	<< "<Piece Extent=\"" << x5 << " " << x6 << " " << x7 << " " << x8 << " " << "0" << " " << "0"
-	<< " " << "\" Source=\"" << "solution_processor_1.vtr" << "\">" << std::endl
+	<< " " << "\" Source=\"" << "solution_processor_1_"<< step << ".vtr" << "\"/>" << std::endl
 	<< "<PPointData>" << std::endl
-	<< "<PDataArray type=\"Float64\" Name=\"p\">" << std::endl
+	<< "<PDataArray type=\"Float64\" Name=\"p\"/>" << std::endl
 	<< "</PPointData>" << std::endl
-	<< "<PRectilinearGrid>" << std::endl
+	<< "</PRectilinearGrid>" << std::endl
 	<< "</VTKFile>" << std::endl;
 	fb.close();
 
@@ -324,7 +324,8 @@ void IO::writeVTKSlavefile(const 	MultiIndexType & griddimension,
 									GridFunctionType p,
 									const PointType & delta,
 									int world_rank,
-									int d) {
+									int d,
+									int step) {
 
 	IndexType iMax = griddimension[0];
 		IndexType jMax = griddimension[1];
@@ -341,12 +342,16 @@ void IO::writeVTKSlavefile(const 	MultiIndexType & griddimension,
 		processorgridcoords[0] = 0;
 		processorgridcoords[1] = 1;
 
+	char numstr[21];
+	sprintf(numstr, "%d", step);
 	char my_rank[2];
 	sprintf(my_rank, "%d", world_rank);
 	std::string filename;
 	filename.append("./");
 	filename.append("solution_processor_");
 	filename.append(my_rank);
+	filename.append("_");
+	filename.append(numstr);
 	filename.append(".vtr");
 
 	IndexType x1 = -1; //processorgridcoords[0] * (localgriddimension[0]) - stencilwidth;
@@ -388,8 +393,8 @@ void IO::writeVTKSlavefile(const 	MultiIndexType & griddimension,
 	<< "</Coordinates>" << std::endl
 	<< "<PointData>" << std::endl
 	<< "<PDataArray type=\"Float64\" Name=\"p\" format=\"ascii\">" << std::endl;
-	for (int i = 0; i <= iMax; ++i){
-		for (int j = 0; j <= jMax; ++j){
+	for (int i = 0; i < localgriddimension[0]; ++i){
+		for (int j = 0; j < localgriddimension[1]; ++j){
 			os << std::scientific << p[i][j] << " ";
 		}
 		os << std::endl;

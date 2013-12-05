@@ -103,7 +103,7 @@ int main() {
 int count=0;
 	while ((t < SimIO.para.tEnd)){
 		SimIO.writeVTKMasterfile(global_grid,u.getGridFunction(),v.getGridFunction(),p.getGridFunction(),delta,n);
-		SimIO.writeVTKSlavefile(global_grid,u.getGridFunction(),v.getGridFunction(),p.getGridFunction(),delta,world_rank,n);
+		SimIO.writeVTKSlavefile(global_grid,u.getGridFunction(),v.getGridFunction(),p.getGridFunction(),delta,world_rank,n,n);
 
 		// compute timestep size deltaT
 		RealType uMax = u.MaxValueGridFunction(begin, end);
@@ -112,6 +112,7 @@ int count=0;
 
 		double deltaTmin;
 
+		//cout << "was soll des?" << endl;
 		MPI_Reduce(&deltaT,&deltaTmin,1,MPI_DOUBLE, MPI_MIN, 0, MPI_COMM_WORLD);
 		MPI_Bcast(&deltaTmin,1,MPI_DOUBLE,0,MPI_COMM_WORLD);
 
