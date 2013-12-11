@@ -357,9 +357,20 @@ void IO::writeVTKSlavefile(const MultiIndexType & griddimension,
 	std::ostream os(&fb);
 
 	os << "<?xml version=\"1.0\"?>" << std::endl
-			<< "<VTKFile type=\"RectilinearGrid\">" << std::endl
-			<< "<RectilinearGrid WholeExtent=\"" << "0" << " " << (iMax - 1)
-			<< " " << "0" << " " << (jMax - 1) << " " << "0" << " " << "0";
+			<< "<VTKFile type=\"RectilinearGrid\">" << std::endl;
+
+	//		<< "<RectilinearGrid WholeExtent=\"" << "0" << " " << (iMax - 1)
+	//		<< " " << "0" << " " << (jMax - 1) << " " << "0" << " " << "0";
+
+
+
+	if (world_rank == 0) {
+			os<< "<RectilinearGrid WholeExtent=\"" << x1 << " " << x2
+					<< " " << x3 << " " << x4 << " " << "0" << " " << "0";}
+	if (world_rank == 1) {
+		os<< "<RectilinearGrid WholeExtent=\"" << x5 << " " << x6
+							<< " " << x7 << " " << x8 << " " << "0" << " " << "0";}
+
 	if (world_rank == 0) {
 		os << " " << "\" GhostLevel=\"" << "1" << "\">" << std::endl;
 		os << "<Piece Extent=\"" << x1 << " " << x2 << " " << x3 << " " << x4
