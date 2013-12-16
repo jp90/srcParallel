@@ -5,7 +5,6 @@
 // Copyright   : Your copyright notice
 // Description : Hello World in C++, Ansi-style
 //============================================================================
-
 #include <iostream>
 #include "IO.hpp"
 #include "gridfunction.h"
@@ -19,6 +18,9 @@
 using namespace std;
 
 int main() {
+
+	int s = 0;
+
 	char input[] = "./srcParallel/inputvals.txt";
 	char output[] = "./srcParallel/inputvals.txt";
 	IO SimIO(input, output);
@@ -34,14 +36,9 @@ int main() {
 		global_grid[0] = SimIO.para.iMax + 2;
 		global_grid[1] = SimIO.para.jMax + 2;
 
-
 	//PARA:
 	SimIO.para.iMax = SimIO.para.iMax/2;
 	SimIO.para.world_rank = world_rank;
-
-
-
-
 
 	//initialize u,v,p
 	MultiIndexType begin, end;
@@ -67,11 +64,6 @@ int main() {
 	end[1] = SimIO.para.jMax;
 	p.SetGridFunction(begin, end, SimIO.para.pi);
 
-
-
-
-
-
 	GridFunction gx(u.griddimension);
 	GridFunction gy(v.griddimension);
 
@@ -80,24 +72,25 @@ int main() {
 
 	GridFunction rhs(p.griddimension);
 
-
-
 	Computation computer(SimIO);
 	Solver solve(SimIO);
 
 	PointType delta;
     //computer.setBoundaryU(u);
-    //u.Grid_Print();
+    //p.Grid_Print();
 	delta[0]=SimIO.para.deltaX;
 	delta[1]=SimIO.para.deltaY;
 	//Start Main Loop
 
-	computer.setBoundaryU(u);
 	computer.setBoundaryV(v);
+	if(world_rank==0){sleep(s);}
+					cout << world_rank <<": nach boundary" << endl;
+						p.Grid_Print();
+	if(world_rank==1){sleep(s);}
+					cout << world_rank <<": nach boundary" << endl;
+						p.Grid_Print();
 
 	Communication communication(world_rank);
-
-
 
 
 int count=0;
@@ -115,28 +108,36 @@ int count=0;
 		//cout << "was soll des?" << endl;
 		MPI_Reduce(&deltaT,&deltaTmin,1,MPI_DOUBLE, MPI_MIN, 0, MPI_COMM_WORLD);
 		MPI_Bcast(&deltaTmin,1,MPI_DOUBLE,0,MPI_COMM_WORLD);
-
+	//	if(world_rank==1){sleep(s);}
+	//		cout << world_rank <<": bevor boundary" << endl;
+	//			p.Grid_Print();
 		// set boundary values
 		computer.setBoundaryU(u);
 		computer.setBoundaryV(v);
+	//	if(world_rank==1){sleep(s);}
+	//				cout << world_rank <<": nach boundary" << endl;
+	//					p.Grid_Print();
+
 		// Compute F and G
 		computer.computeMomentumEquations(f, g, u, v, gx, gy, deltaTmin);
 
 		computer.setBoundaryF(f,u);
 		computer.setBoundaryG(g,v);
 
-	/*	if(world_rank==1)sleep(1);
+	/*	if(world_rank==1)sleep(s);
 		cout<<"u"<<endl;
-		u.Grid_Print();
+		p.Grid_Print();
 
 		cout<<"v"<<endl;
-		v.Grid_Print();
+		p.Grid_Print(); */
+		if(world_rank==1){sleep(s);}
+				cout << world_rank <<": f" << endl;
 
-		cout<<"f"<<endl;
 		f.Grid_Print();
+		if(world_rank==1){sleep(s);}
+		cout << world_rank <<": g" << endl;
 
-		cout<<"g"<<endl;
-		g.Grid_Print();*/
+		g.Grid_Print();
 
 
 		// set right hand side of p equation
@@ -153,9 +154,20 @@ int count=0;
             // SOR Cycle
             solve.SORCycle_Black(p,rhs);
            // p.Grid_Print();
+          // 		if(world_rank==1){sleep(s);}
+           // 		cout << world_rank <<": after black" << endl;
+            //		p.Grid_Print();
+
             communication.ExchangePValues(p);
+
+
             solve.SORCycle_White(p,rhs);
-           // if(world_rank==0) sleep(1);
+
+            communication.ExchangePValues(p);
+        //	if(world_rank==1){sleep(s);}
+         //           		cout << world_rank <<": after white" << endl;
+              //      		p.Grid_Print();
+           // if(world_rank==0) sleep(s);
             //p.Grid_Print();
             //return 0;
 			Residuum_local = solve.computeResidual(p,rhs);
@@ -173,7 +185,14 @@ int count=0;
 
 		// Update velocites u and v
 		computer.computeNewVelocities(u, v, f, g, p, deltaTmin);
+	//	if(world_rank==1){sleep(s);}
+	//	cout << world_rank <<": bevor austausch" << endl;
+	//	p.Grid_Print();
 		communication.ExchangeUVValues(u,v);
+
+//		if(world_rank==1){sleep(s);}
+//		cout << world_rank <<": nach austausch" << endl;
+	//	p.Grid_Print();
 		cout <<"Prozessor " << world_rank <<" finished" <<endl;
 
 		n++;

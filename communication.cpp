@@ -21,7 +21,7 @@ void Communication::ExchangePValues(GridFunction& p) {
 		begin[0] = 0;
 		end[0] = 0;
 		begin[1] = 0;
-		end[1] = p.griddimension[1] - 1;
+		end[1] = p.griddimension[1] - 2;
 		MultiIndexType Offset;
 		Offset[0] = p.griddimension[0] - 2;
 		Offset[1] = 0;
@@ -84,25 +84,25 @@ void Communication::ExchangeUVValues(GridFunction& u,GridFunction& v) {
 		begin[1] = 0;
 		end[1] = u.griddimension[1] - 1;
 		MultiIndexType Offset;
-		Offset[0] = u.griddimension[0] - 2;
+		Offset[0] = u.griddimension[0] - 3;
 		Offset[1] = 0;
 		package.SetGridFunction(begin, end, 1.0, u, Offset);
-	//	package.Grid_Print();
+		//package.Grid_Print();
 
 		int test = MPI_Send(&package.getGridFunction()[0][0],package.griddimension[1],MPI_DOUBLE,1,COM_U,MPI_COMM_WORLD);
 		if(test!=MPI_SUCCESS){
 		cout <<"0: MPI: Sending failed!"<<endl;}
 		MPI_Status  status;
 		MPI_Recv(&package.getGridFunction()[0][0],package.griddimension[1],MPI_DOUBLE,1,COM_U,MPI_COMM_WORLD,&status);
-	//	package.Grid_Print();
 
-				begin[0] = u.griddimension[0] - 1;
-				end[0] = u.griddimension[0] - 1;
+				begin[0] = u.griddimension[0] - 2;
+				end[0] = u.griddimension[0] - 2;
 				begin[1] = 0;
 				end[1] = u.griddimension[1] - 1;
-				Offset[0] = -1*(u.griddimension[0] - 1);
+				Offset[0] = -1*(u.griddimension[0] - 2);
 				Offset[1] = 0;
 				u.SetGridFunction(begin,end,1.0,package,Offset);
+			//	u.Grid_Print();
 	}
 	if (world_rank == 1) {
 		GridFunction package(1, u.griddimension[1]);
@@ -161,7 +161,7 @@ void Communication::ExchangeUVValues(GridFunction& u,GridFunction& v) {
 				end[1] = v.griddimension[1] - 1;
 				Offset[0] = -1*(v.griddimension[0] - 1);
 				Offset[1] = 0;
-				u.SetGridFunction(begin,end,1.0,package,Offset);
+				v.SetGridFunction(begin,end,1.0,package,Offset);
 	}
 	if (world_rank == 1) {
 		GridFunction package(1, v.griddimension[1]);
