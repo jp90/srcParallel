@@ -114,17 +114,17 @@ RealType IO::interpolateVelocityU(RealType x, RealType y, GridFunctionType & u,
 	offset[0] = index[0] - 1;
 	offset[1] = index[1] - 1;
 
-	RealType u1 = Element(u, offset);// datafields->u->getField ()[i - 1][j - 1];
+	RealType u1 = Element(u, offset); // datafields->u->getField ()[i - 1][j - 1];
 
 	offset[0] = index[0];
 	offset[1] = index[1] - 1;
 
-	RealType u2 = Element(u, offset);	//datafields->u->getField ()[i][j - 1];
+	RealType u2 = Element(u, offset); //datafields->u->getField ()[i][j - 1];
 
 	offset[0] = index[0] - 1;
 	offset[1] = index[1];
 
-	RealType u3 = Element(u, offset);	//datafields->u->getField ()[i - 1][j];
+	RealType u3 = Element(u, offset); //datafields->u->getField ()[i - 1][j];
 	RealType u4 = Element(u, index);
 
 	RealType uInterploated = (1.0 / (deltaX * deltaY))
@@ -156,19 +156,19 @@ RealType IO::interpolateVelocityV(RealType x, RealType y, GridFunctionType & v,
 	offset[0] = index[0] - 1;
 	offset[1] = index[1] - 1;
 
-	RealType v1 = Element(v, offset);//datafields->v->getField ()[i - 1][j - 1];
+	RealType v1 = Element(v, offset); //datafields->v->getField ()[i - 1][j - 1];
 
 	offset[0] = index[0];
 	offset[1] = index[1] - 1;
 
-	RealType v2 = Element(v, offset);	//datafields->v->getField ()[i][j - 1];
+	RealType v2 = Element(v, offset); //datafields->v->getField ()[i][j - 1];
 
 	offset[0] = index[0] - 1;
 	offset[1] = index[1];
 
-	RealType v3 = Element(v, offset);	//datafields->v->getField ()[i - 1][j];
+	RealType v3 = Element(v, offset); //datafields->v->getField ()[i - 1][j];
 
-	RealType v4 = Element(v, index);	//datafields->v->getField ()[i][j];
+	RealType v4 = Element(v, index); //datafields->v->getField ()[i][j];
 
 	RealType vInterpolated = (1.0 / (deltaX * deltaY))
 			* ((x2 - x) * (y2 - y) * v1 + (x - x1) * (y2 - y) * v2
@@ -176,9 +176,9 @@ RealType IO::interpolateVelocityV(RealType x, RealType y, GridFunctionType & v,
 	return vInterpolated;
 }
 
-void IO::writeVTKFile(const MultiIndexType & griddimension,
-		GridFunctionType  u, GridFunctionType  v, GridFunctionType  p,
-		const PointType & delta, int step) {
+void IO::writeVTKFile(const MultiIndexType & griddimension, GridFunctionType u,
+		GridFunctionType v, GridFunctionType p, const PointType & delta,
+		int step) {
 	RealType deltaX = delta[0];
 	RealType deltaY = delta[1];
 
@@ -245,4 +245,194 @@ void IO::writeVTKFile(const MultiIndexType & griddimension,
 			<< "</Piece>" << std::endl << "</StructuredGrid>" << std::endl
 			<< "</VTKFile>" << std::endl;
 	fb.close();
+}
+
+void IO::writeVTKMasterfile(const MultiIndexType & griddimension,
+		GridFunctionType u, GridFunctionType v, GridFunctionType p,
+		const PointType & delta, int step) {
+
+	IndexType iMax = griddimension[0];
+	IndexType jMax = griddimension[1];
+
+	// 2x1-Gitter
+	IndexType localgriddimension[2];
+	localgriddimension[0] = (griddimension[0]) / 2 + 1;
+	localgriddimension[1] = griddimension[1];
+
+	// als Argumente uebergeben ?!
+	IndexType stencilwidth = 1;
+	IndexType processorgridcoords[2];
+	// processorgridcoords??
+	processorgridcoords[0] = 0;
+	processorgridcoords[1] = 1;
+
+	char numstr[21];
+	sprintf(numstr, "%d", step);
+	std::string filename;
+	filename.append("./");
+	filename.append("field_");
+	filename.append(numstr);
+	filename.append(".pvtr");
+
+	/*IndexType x1 = 0; //processorgridcoords[0] * (localgriddimension[0]) - stencilwidth;
+	 IndexType x2 = localgriddimension[0] - 1; //(processorgridcoords[0] + 1) * (localgriddimension[0]) + stencilwidth - 1;
+	 IndexType x3 = 0; //processorgridcoords[1] * (localgriddimension[1]) - stencilwidth;
+	 IndexType x4 = localgriddimension[1] - 1; //(processorgridcoords[1] + 1) * (localgriddimension[1]) + stencilwidth - 1;
+
+	 IndexType x5 = localgriddimension[0] - 1; //processorgridcoords[0] * (localgriddimension[0]) - stencilwidth;
+	 IndexType x6 = localgriddimension[0] * 2 - 4; //(processorgridcoords[0] + 1) * (localgriddimension[0]) + stencilwidth - 1;
+	 IndexType x7 = 0; //processorgridcoords[1] * (localgriddimension[1]) - stencilwidth;
+	 IndexType x8 = localgriddimension[1] - 1; //(processorgridcoords[1] + 1) * (localgriddimension[1]) + stencilwidth - 1; */
+	IndexType x1 = 0; //processorgridcoords[0] * (localgriddimension[0]) - stencilwidth;
+	IndexType x2 = localgriddimension[0] - 2; //(processorgridcoords[0] + 1) * (localgriddimension[0]) + stencilwidth - 1;
+	IndexType x3 = 0; //processorgridcoords[1] * (localgriddimension[1]) - stencilwidth;
+	IndexType x4 = localgriddimension[1] - 2; //(processorgridcoords[1] + 1) * (localgriddimension[1]) + stencilwidth - 1;
+
+	IndexType x5 = localgriddimension[0] - 1 - 1; //processorgridcoords[0] * (localgriddimension[0]) - stencilwidth;
+	IndexType x6 = localgriddimension[0] * 2 - 4; //(processorgridcoords[0] + 1) * (localgriddimension[0]) + stencilwidth - 1;
+	IndexType x7 = 0; //processorgridcoords[1] * (localgriddimension[1]) - stencilwidth;
+	IndexType x8 = localgriddimension[1] - 2; //(processorgridcoords[1] + 1) * (localgriddimension[1]) + stencilwidth - 1;
+
+	std::filebuf fb;
+	fb.open(const_cast<char *>(filename.c_str()), std::ios::out);
+	std::ostream os(&fb);
+
+	os << "<?xml version=\"1.0\"?>" << std::endl
+			<< "<VTKFile type=\"PRectilinearGrid\">" << std::endl
+			<< "<PRectilinearGrid WholeExtent=\"" << "0" << " "
+			<< (iMax - 1 - 1) << " " << "0" << " " << (jMax - 1 - 1) << " "
+			<< "0" << " " << "0" << " " << "\" GhostLevel=\"" << "1" << "\">"
+			<< std::endl << "<PCoordinates>" << std::endl
+			<< "<PDataArray type=\"Float64\"/>" << std::endl
+			<< "<PDataArray type=\"Float64\"/>" << std::endl
+			<< "<PDataArray type=\"Float64\"/>" << std::endl
+			<< "</PCoordinates>" << std::endl << "<Piece Extent=\"" << x1 << " "
+			<< x2 << " " << x3 << " " << x4 << " " << "0" << " " << "0"
+			<< "\" Source=\"" << "solution_processor_0_" << step << ".vtr"
+			<< "\" />" << std::endl << "<Piece Extent=\"" << x5 << " " << x6
+			<< " " << x7 << " " << x8 << " " << "0" << " " << "0"
+			<< "\" Source=\"" << "solution_processor_1_" << step << ".vtr"
+			<< "\" />" << std::endl << "<PPointData>" << std::endl
+			<< "<PDataArray type=\"Float64\" Name=\"p\"/>" << std::endl
+			<< "<DataArray Name=\"field\" NumberOfComponents=\"3\" type=\"Float64\" />"
+			<< "</PPointData>" << std::endl << "</PRectilinearGrid>"
+			<< std::endl << "</VTKFile>" << std::endl;
+	fb.close();
+
+}
+
+void IO::writeVTKSlavefile(const MultiIndexType & griddimension,
+		GridFunctionType u, GridFunctionType v, GridFunctionType p,
+		const PointType & delta, int world_rank, int d, int step) {
+
+	IndexType iMax = griddimension[0];
+	IndexType jMax = griddimension[1];
+
+	// 2x1-Gitter
+	IndexType localgriddimension[2];
+	localgriddimension[0] = (griddimension[0]) / 2 + 1;
+	localgriddimension[1] = griddimension[1];
+
+	// als Argumente uebergeben ?!
+	IndexType stencilwidth = 1;
+	IndexType processorgridcoords[2];
+	// processorgridcoords??
+	processorgridcoords[0] = 0;
+	processorgridcoords[1] = 1;
+
+	char numstr[21];
+	sprintf(numstr, "%d", step);
+	char my_rank[2];
+	sprintf(my_rank, "%d", world_rank);
+	std::string filename;
+	filename.append("./");
+	filename.append("solution_processor_");
+	filename.append(my_rank);
+	filename.append("_");
+	filename.append(numstr);
+	filename.append(".vtr");
+
+	IndexType x1 = 0; //processorgridcoords[0] * (localgriddimension[0]) - stencilwidth;
+	IndexType x2 = localgriddimension[0] - 2; //(processorgridcoords[0] + 1) * (localgriddimension[0]) + stencilwidth - 1;
+	IndexType x3 = 0; //processorgridcoords[1] * (localgriddimension[1]) - stencilwidth;
+	IndexType x4 = localgriddimension[1] - 2; //(processorgridcoords[1] + 1) * (localgriddimension[1]) + stencilwidth - 1;
+
+	IndexType x5 = localgriddimension[0] - 1 - 1; //processorgridcoords[0] * (localgriddimension[0]) - stencilwidth;
+	IndexType x6 = localgriddimension[0] * 2 - 4; //(processorgridcoords[0] + 1) * (localgriddimension[0]) + stencilwidth - 1;
+	IndexType x7 = 0; //processorgridcoords[1] * (localgriddimension[1]) - stencilwidth;
+	IndexType x8 = localgriddimension[1] - 2; //(processorgridcoords[1] + 1) * (localgriddimension[1]) + stencilwidth - 1;
+
+	std::filebuf fb;
+	fb.open(const_cast<char *>(filename.c_str()), std::ios::out);
+	std::ostream os(&fb);
+
+	os << "<?xml version=\"1.0\"?>" << std::endl
+			<< "<VTKFile type=\"RectilinearGrid\">" << std::endl;
+
+	//		<< "<RectilinearGrid WholeExtent=\"" << "0" << " " << (iMax - 1)
+	//		<< " " << "0" << " " << (jMax - 1) << " " << "0" << " " << "0";
+
+	if (world_rank == 0) {
+		os << "<RectilinearGrid WholeExtent=\"" << x1 << " " << x2 << " " << x3
+				<< " " << x4 << " " << "0" << " " << "0";
+	}
+	if (world_rank == 1) {
+		os << "<RectilinearGrid WholeExtent=\"" << x5 << " " << x6 << " " << x7
+				<< " " << x8 << " " << "0" << " " << "0";
+	}
+
+	if (world_rank == 0) {
+		os << " " << "\" GhostLevel=\"" << "1" << "\">" << std::endl;
+		os << "<Piece Extent=\"" << x1 << " " << x2 << " " << x3 << " " << x4
+				<< " " << "0" << " " << "0" << " \">" << std::endl;
+	}
+	if (world_rank == 1) {
+		os << " " << "\" GhostLevel=\"" << "1" << "\">" << std::endl;
+		os << "<Piece Extent=\"" << x5 << " " << x6 << " " << x7 << " " << x8
+				<< " " << "0" << " " << "0" << " \">" << std::endl;
+	}
+	os << "<Coordinates>" << std::endl;
+	os << "<DataArray type=\"Float64\" format=\"ascii\"> " << std::endl;
+	for (int i = 0; i <= localgriddimension[0] - 1; ++i) {
+		os << std::scientific << i * delta[0] << " ";
+	}
+	os << "</DataArray>" << std::endl
+			<< "<DataArray type=\"Float64\" format=\"ascii\"> " << std::endl;
+	for (int i = 0; i <= localgriddimension[1] - 1; ++i) {
+		os << std::scientific << i * delta[1] << " ";
+	}
+	os << "</DataArray>" << std::endl
+			<< "<DataArray type=\"Float64\" format=\"ascii\"> " << "0" << " "
+			<< "0" << " " << "</DataArray>" << std::endl << "</Coordinates>"
+			<< std::endl << "<PointData Vectors=\"field\"  Scalars=\"p\">"
+			<< std::endl
+			<< "<DataArray type=\"Float64\" Name=\"p\" format=\"ascii\">"
+			<< std::endl;
+	for (int i = 0; i < localgriddimension[1]; ++i) {
+		for (int j = 0; j < localgriddimension[0]; ++j) {
+			os << std::scientific << p[j][i] << " ";
+		}
+		os << std::endl;
+	}
+	// wie/wo u und v ins file schreiben??
+	os << "</DataArray>" << std::endl
+			<< "<DataArray Name=\"field\" NumberOfComponents=\"3\" type=\"Float64\" >"
+			<< std::endl;
+	for (int i = 0; i < localgriddimension[1] - 1; ++i) {
+		RealType x = i * delta[1];
+
+		for (int j = 0; j < localgriddimension[0] - 1; ++j) {
+			RealType y = j * delta[0];
+
+			os << std::scientific << interpolateVelocityU(y, x, u, delta) << " "
+					<< interpolateVelocityV(y, x, v, delta) << " " << 0.
+					<< std::endl;
+		}
+
+	}
+	os << "</DataArray>" << std::endl << "</PointData>" << std::endl
+			<< "</Piece>" << std::endl << "</RectilinearGrid>" << std::endl
+			<< "</VTKFile>" << std::endl;
+	fb.close();
+
 }

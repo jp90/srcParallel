@@ -17,7 +17,9 @@ public:
 	Solver(IO& SimIO);
 	RealType computeResidual(GridFunction& p,
 			GridFunction& rhs);
-	void SORCycle(GridFunction& p, GridFunction& rhs);
+	void SORCycle_Black(GridFunction& p, GridFunction& rhs);
+
+	void SORCycle_White(GridFunction& p, GridFunction& rhs);
 
 	IO SimIO;
 };

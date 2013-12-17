@@ -180,25 +180,25 @@ void GridFunction::SetGridFunction(const MultiIndexType& begin,
 	if (begin[0] + offset[0] < 0) {
 		cout << "Invalid Index";
 	}
-	if (begin[0] + offset[0] > griddimension[0]) {
+	if (begin[0] + offset[0] > sourcegridfunction.griddimension[0]) {
 		cout << "Invalid Index";
 	}
 	if (end[0] + offset[0] < 0) {
 		cout << "Invalid Index";
 	}
-	if (end[0] + offset[0] > griddimension[0]) {
+	if (end[0] + offset[0] > sourcegridfunction.griddimension[0]) {
 		cout << "Invalid Index";
 	}
 	if (begin[1] + offset[1] < 0) {
 		cout << "Invalid Index";
 	}
-	if (begin[1] + offset[1] > griddimension[1]) {
+	if (begin[1] + offset[1] > sourcegridfunction.griddimension[1]) {
 		cout << "Invalid Index";
 	}
 	if (end[1] + offset[1] < 0) {
 		cout << "Invalid Index";
 	}
-	if (end[1] + offset[1] > griddimension[1]) {
+	if (end[1] + offset[1] > sourcegridfunction.griddimension[1]) {
 		cout << "Invalid Index";
 	}
 
@@ -230,25 +230,25 @@ void GridFunction::SetGridFunction(const MultiIndexType& begin,
 	if (begin[0] + offset[0] < 0) {
 		cout << "Invalid Index";
 	}
-	if (begin[0] + offset[0] > griddimension[0]) {
+	if (begin[0] + offset[0] > sourcegridFunction.griddimension[0]) {
 		cout << "Invalid Index";
 	}
 	if (end[0] + offset[0] < 0) {
 		cout << "Invalid Index";
 	}
-	if (end[0] + offset[0] > griddimension[0]) {
+	if (end[0] + offset[0] > sourcegridFunction.griddimension[0]) {
 		cout << "Invalid Index";
 	}
 	if (begin[1] + offset[1] < 0) {
 		cout << "Invalid Index";
 	}
-	if (begin[1] + offset[1] > griddimension[1]) {
+	if (begin[1] + offset[1] > sourcegridFunction.griddimension[1]) {
 		cout << "Invalid Index";
 	}
 	if (end[1] + offset[1] < 0) {
 		cout << "Invalid Index";
 	}
-	if (end[1] + offset[1] > griddimension[1]) {
+	if (end[1] + offset[1] > sourcegridFunction.griddimension[1]) {
 		cout << "Invalid Index";
 	}
 
@@ -330,7 +330,7 @@ void GridFunction::MultiplyGridFunctions(const MultiIndexType& begin,
 }
 void GridFunction::Grid_Print() {
 	for (int i = 0; i < griddimension[0]; i++) {
-		for (int j = 0; j < griddimension[0]; j++) {
+		for (int j = 0; j < griddimension[1]; j++) {
 			cout << gridfunction[i][j] << " ";
 		}
 		cout << "\n";

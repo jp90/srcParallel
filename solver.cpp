@@ -53,11 +53,11 @@ RealType Solver::computeResidual(GridFunction& p,
 	return sqrt(res);
 
 }
-void Solver::SORCycle(GridFunction& p, GridFunction& rhs) {
+void Solver::SORCycle_Black(GridFunction& p, GridFunction& rhs) {
 
 
 	for (int i = 1; i<=SimIO.para.iMax;i++){
-		for(int j=1; j<=SimIO.para.jMax;j++){
+		for(int j=2-i%2; j<=SimIO.para.jMax;j+=2){
 
 			p.getGridFunction()[i][j] = (1-SimIO.para.omg)*p.getGridFunction()[i][j] +
 						(SimIO.para.omg)/(2.0*(1.0/(SimIO.para.deltaX*SimIO.para.deltaX) + 1.0/(SimIO.para.deltaY*SimIO.para.deltaY)))*
@@ -69,6 +69,21 @@ void Solver::SORCycle(GridFunction& p, GridFunction& rhs) {
 		}
 	}
 
+}
+
+void Solver::SORCycle_White(GridFunction& p, GridFunction& rhs) {
 
 
+	for (int i = 1; i<=SimIO.para.iMax;i++){
+		for(int j=1+i%2; j<=SimIO.para.jMax;j+=2){
+
+			p.getGridFunction()[i][j] =(1-SimIO.para.omg)*p.getGridFunction()[i][j] +
+						(SimIO.para.omg)/(2.0*(1.0/(SimIO.para.deltaX*SimIO.para.deltaX) + 1.0/(SimIO.para.deltaY*SimIO.para.deltaY)))*
+						((p.getGridFunction()[i+1][j]+p.getGridFunction()[i-1][j])/(SimIO.para.deltaX*SimIO.para.deltaX) +
+						(p.getGridFunction()[i][j+1]+p.getGridFunction()[i][j-1])/(SimIO.para.deltaY*SimIO.para.deltaY)
+						- rhs.getGridFunction()[i][j]);
+
+
+		}
+	}
 }
