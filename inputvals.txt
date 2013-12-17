@@ -1,11 +1,11 @@
 xLength=1.0
 yLength=1.0
-iMax=128
-jMax=128
-tEnd=10.0
+iMax=50
+jMax=50
+tEnd=100.0
 deltaT=0.0
-deltaX=0.0078125
-deltaY=0.0078125
+deltaX=0.02
+deltaY=0.02
 tau=0.5
 deltaVec=1.4
 iterMax=200

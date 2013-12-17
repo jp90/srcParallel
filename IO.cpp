@@ -274,15 +274,24 @@ void IO::writeVTKMasterfile(const MultiIndexType & griddimension,
 	filename.append(numstr);
 	filename.append(".pvtr");
 
-	IndexType x1 = 0; //processorgridcoords[0] * (localgriddimension[0]) - stencilwidth;
-	IndexType x2 = localgriddimension[0] - 1; //(processorgridcoords[0] + 1) * (localgriddimension[0]) + stencilwidth - 1;
-	IndexType x3 = 0; //processorgridcoords[1] * (localgriddimension[1]) - stencilwidth;
-	IndexType x4 = localgriddimension[1] - 1; //(processorgridcoords[1] + 1) * (localgriddimension[1]) + stencilwidth - 1;
+	/*IndexType x1 = 0; //processorgridcoords[0] * (localgriddimension[0]) - stencilwidth;
+	 IndexType x2 = localgriddimension[0] - 1; //(processorgridcoords[0] + 1) * (localgriddimension[0]) + stencilwidth - 1;
+	 IndexType x3 = 0; //processorgridcoords[1] * (localgriddimension[1]) - stencilwidth;
+	 IndexType x4 = localgriddimension[1] - 1; //(processorgridcoords[1] + 1) * (localgriddimension[1]) + stencilwidth - 1;
 
-	IndexType x5 = localgriddimension[0] - 1; //processorgridcoords[0] * (localgriddimension[0]) - stencilwidth;
-	IndexType x6 = localgriddimension[0] * 2 - 3; //(processorgridcoords[0] + 1) * (localgriddimension[0]) + stencilwidth - 1;
+	 IndexType x5 = localgriddimension[0] - 1; //processorgridcoords[0] * (localgriddimension[0]) - stencilwidth;
+	 IndexType x6 = localgriddimension[0] * 2 - 4; //(processorgridcoords[0] + 1) * (localgriddimension[0]) + stencilwidth - 1;
+	 IndexType x7 = 0; //processorgridcoords[1] * (localgriddimension[1]) - stencilwidth;
+	 IndexType x8 = localgriddimension[1] - 1; //(processorgridcoords[1] + 1) * (localgriddimension[1]) + stencilwidth - 1; */
+	IndexType x1 = 0; //processorgridcoords[0] * (localgriddimension[0]) - stencilwidth;
+	IndexType x2 = localgriddimension[0] - 2; //(processorgridcoords[0] + 1) * (localgriddimension[0]) + stencilwidth - 1;
+	IndexType x3 = 0; //processorgridcoords[1] * (localgriddimension[1]) - stencilwidth;
+	IndexType x4 = localgriddimension[1] - 2; //(processorgridcoords[1] + 1) * (localgriddimension[1]) + stencilwidth - 1;
+
+	IndexType x5 = localgriddimension[0] - 1 - 1; //processorgridcoords[0] * (localgriddimension[0]) - stencilwidth;
+	IndexType x6 = localgriddimension[0] * 2 - 4; //(processorgridcoords[0] + 1) * (localgriddimension[0]) + stencilwidth - 1;
 	IndexType x7 = 0; //processorgridcoords[1] * (localgriddimension[1]) - stencilwidth;
-	IndexType x8 = localgriddimension[1] - 1; //(processorgridcoords[1] + 1) * (localgriddimension[1]) + stencilwidth - 1;
+	IndexType x8 = localgriddimension[1] - 2; //(processorgridcoords[1] + 1) * (localgriddimension[1]) + stencilwidth - 1;
 
 	std::filebuf fb;
 	fb.open(const_cast<char *>(filename.c_str()), std::ios::out);
@@ -290,19 +299,20 @@ void IO::writeVTKMasterfile(const MultiIndexType & griddimension,
 
 	os << "<?xml version=\"1.0\"?>" << std::endl
 			<< "<VTKFile type=\"PRectilinearGrid\">" << std::endl
-			<< "<PRectilinearGrid WholeExtent=\"" << "0" << " " << (iMax - 1)
-			<< " " << "0" << " " << (jMax - 1) << " " << "0" << " " << "0"
-			<< " " << "\" GhostLevel=\"" << "1" << "\">" << std::endl
-			<< "<PCoordinates>" << std::endl << "<PDataArray type=\"Float64\"/>"
-			<< std::endl << "<PDataArray type=\"Float64\"/>" << std::endl
+			<< "<PRectilinearGrid WholeExtent=\"" << "0" << " "
+			<< (iMax - 1 - 1) << " " << "0" << " " << (jMax - 1 - 1) << " "
+			<< "0" << " " << "0" << " " << "\" GhostLevel=\"" << "1" << "\">"
+			<< std::endl << "<PCoordinates>" << std::endl
+			<< "<PDataArray type=\"Float64\"/>" << std::endl
+			<< "<PDataArray type=\"Float64\"/>" << std::endl
 			<< "<PDataArray type=\"Float64\"/>" << std::endl
 			<< "</PCoordinates>" << std::endl << "<Piece Extent=\"" << x1 << " "
-			<< x2 << " " << x3 << " " << x4 << " " << "0" << " " << "0" << " "
+			<< x2 << " " << x3 << " " << x4 << " " << "0" << " " << "0"
 			<< "\" Source=\"" << "solution_processor_0_" << step << ".vtr"
-			<< "\"/>" << std::endl << "<Piece Extent=\"" << x5 << " " << x6
-			<< " " << x7 << " " << x8 << " " << "0" << " " << "0" << " "
+			<< "\" />" << std::endl << "<Piece Extent=\"" << x5 << " " << x6
+			<< " " << x7 << " " << x8 << " " << "0" << " " << "0"
 			<< "\" Source=\"" << "solution_processor_1_" << step << ".vtr"
-			<< "\"/>" << std::endl << "<PPointData>" << std::endl
+			<< "\" />" << std::endl << "<PPointData>" << std::endl
 			<< "<PDataArray type=\"Float64\" Name=\"p\"/>" << std::endl
 			<< "<DataArray Name=\"field\" NumberOfComponents=\"3\" type=\"Float64\" />"
 			<< "</PPointData>" << std::endl << "</PRectilinearGrid>"
@@ -343,14 +353,14 @@ void IO::writeVTKSlavefile(const MultiIndexType & griddimension,
 	filename.append(".vtr");
 
 	IndexType x1 = 0; //processorgridcoords[0] * (localgriddimension[0]) - stencilwidth;
-	IndexType x2 = localgriddimension[0] - 1; //(processorgridcoords[0] + 1) * (localgriddimension[0]) + stencilwidth - 1;
+	IndexType x2 = localgriddimension[0] - 2; //(processorgridcoords[0] + 1) * (localgriddimension[0]) + stencilwidth - 1;
 	IndexType x3 = 0; //processorgridcoords[1] * (localgriddimension[1]) - stencilwidth;
-	IndexType x4 = localgriddimension[1] - 1; //(processorgridcoords[1] + 1) * (localgriddimension[1]) + stencilwidth - 1;
+	IndexType x4 = localgriddimension[1] - 2; //(processorgridcoords[1] + 1) * (localgriddimension[1]) + stencilwidth - 1;
 
-	IndexType x5 = localgriddimension[0] - 1; //processorgridcoords[0] * (localgriddimension[0]) - stencilwidth;
-	IndexType x6 = localgriddimension[0] * 2 - 3; //(processorgridcoords[0] + 1) * (localgriddimension[0]) + stencilwidth - 1;
+	IndexType x5 = localgriddimension[0] - 1 - 1; //processorgridcoords[0] * (localgriddimension[0]) - stencilwidth;
+	IndexType x6 = localgriddimension[0] * 2 - 4; //(processorgridcoords[0] + 1) * (localgriddimension[0]) + stencilwidth - 1;
 	IndexType x7 = 0; //processorgridcoords[1] * (localgriddimension[1]) - stencilwidth;
-	IndexType x8 = localgriddimension[1] - 1; //(processorgridcoords[1] + 1) * (localgriddimension[1]) + stencilwidth - 1;
+	IndexType x8 = localgriddimension[1] - 2; //(processorgridcoords[1] + 1) * (localgriddimension[1]) + stencilwidth - 1;
 
 	std::filebuf fb;
 	fb.open(const_cast<char *>(filename.c_str()), std::ios::out);
@@ -362,14 +372,14 @@ void IO::writeVTKSlavefile(const MultiIndexType & griddimension,
 	//		<< "<RectilinearGrid WholeExtent=\"" << "0" << " " << (iMax - 1)
 	//		<< " " << "0" << " " << (jMax - 1) << " " << "0" << " " << "0";
 
-
-
 	if (world_rank == 0) {
-			os<< "<RectilinearGrid WholeExtent=\"" << x1 << " " << x2
-					<< " " << x3 << " " << x4 << " " << "0" << " " << "0";}
+		os << "<RectilinearGrid WholeExtent=\"" << x1 << " " << x2 << " " << x3
+				<< " " << x4 << " " << "0" << " " << "0";
+	}
 	if (world_rank == 1) {
-		os<< "<RectilinearGrid WholeExtent=\"" << x5 << " " << x6
-							<< " " << x7 << " " << x8 << " " << "0" << " " << "0";}
+		os << "<RectilinearGrid WholeExtent=\"" << x5 << " " << x6 << " " << x7
+				<< " " << x8 << " " << "0" << " " << "0";
+	}
 
 	if (world_rank == 0) {
 		os << " " << "\" GhostLevel=\"" << "1" << "\">" << std::endl;
@@ -408,10 +418,10 @@ void IO::writeVTKSlavefile(const MultiIndexType & griddimension,
 	os << "</DataArray>" << std::endl
 			<< "<DataArray Name=\"field\" NumberOfComponents=\"3\" type=\"Float64\" >"
 			<< std::endl;
-	for (int i = 0; i < localgriddimension[1]; ++i) {
+	for (int i = 0; i < localgriddimension[1] - 1; ++i) {
 		RealType x = i * delta[1];
 
-		for (int j = 0; j < localgriddimension[0]; ++j) {
+		for (int j = 0; j < localgriddimension[0] - 1; ++j) {
 			RealType y = j * delta[0];
 
 			os << std::scientific << interpolateVelocityU(y, x, u, delta) << " "
