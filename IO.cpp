@@ -314,7 +314,7 @@ void IO::writeVTKMasterfile(const MultiIndexType & griddimension,
 			<< "\" Source=\"" << "solution_processor_1_" << step << ".vtr"
 			<< "\" />" << std::endl << "<PPointData>" << std::endl
 			<< "<PDataArray type=\"Float64\" Name=\"p\"/>" << std::endl
-			<< "<DataArray Name=\"field\" NumberOfComponents=\"3\" type=\"Float64\" />"
+			<< "<DataArray Name=\"field\" NumberOfComponents=\"3\" type=\"Float64\" />" << std::endl
 			<< "</PPointData>" << std::endl << "</PRectilinearGrid>"
 			<< std::endl << "</VTKFile>" << std::endl;
 	fb.close();
@@ -382,34 +382,42 @@ void IO::writeVTKSlavefile(const MultiIndexType & griddimension,
 	}
 
 	if (world_rank == 0) {
-		os << " " << "\" GhostLevel=\"" << "1" << "\">" << std::endl;
+		os << " " << "\" GhostLevel=\"" << "0" << "\">" << std::endl;
 		os << "<Piece Extent=\"" << x1 << " " << x2 << " " << x3 << " " << x4
 				<< " " << "0" << " " << "0" << " \">" << std::endl;
 	}
 	if (world_rank == 1) {
-		os << " " << "\" GhostLevel=\"" << "1" << "\">" << std::endl;
+		os << " " << "\" GhostLevel=\"" << "0" << "\">" << std::endl;
 		os << "<Piece Extent=\"" << x5 << " " << x6 << " " << x7 << " " << x8
 				<< " " << "0" << " " << "0" << " \">" << std::endl;
 	}
 	os << "<Coordinates>" << std::endl;
 	os << "<DataArray type=\"Float64\" format=\"ascii\"> " << std::endl;
+
+	if(world_rank==0){
 	for (int i = 0; i <= localgriddimension[0] - 1; ++i) {
+
 		os << std::scientific << i * delta[0] << " ";
-	}
-	os << "</DataArray>" << std::endl
+	}}
+	if(world_rank==1){
+		for (int i = localgriddimension[0]; i <= 2*localgriddimension[0] - 1; ++i) {
+
+			os << std::scientific << i * delta[0] << " ";
+		}}
+	os << std::endl<< "</DataArray>" << std::endl
 			<< "<DataArray type=\"Float64\" format=\"ascii\"> " << std::endl;
 	for (int i = 0; i <= localgriddimension[1] - 1; ++i) {
 		os << std::scientific << i * delta[1] << " ";
 	}
-	os << "</DataArray>" << std::endl
-			<< "<DataArray type=\"Float64\" format=\"ascii\"> " << "0" << " "
-			<< "0" << " " << "</DataArray>" << std::endl << "</Coordinates>"
-			<< std::endl << "<PointData Vectors=\"field\"  Scalars=\"p\">"
+	os <<  std::endl<< "</DataArray>" << std::endl
+			<< "<DataArray type=\"Float64\" format=\"ascii\"> " << std::endl<< "0" << " "
+			<< "0"  << std::endl<< "</DataArray>" << std::endl << "</Coordinates>"
+			<< std::endl << "<PointData>"
 			<< std::endl
 			<< "<DataArray type=\"Float64\" Name=\"p\" format=\"ascii\">"
 			<< std::endl;
-	for (int i = 0; i < localgriddimension[1]; ++i) {
-		for (int j = 0; j < localgriddimension[0]; ++j) {
+	for (int i = 0; i < localgriddimension[1]-1; ++i) {
+		for (int j = 0; j < localgriddimension[0]-1; ++j) {
 			os << std::scientific << p[j][i] << " ";
 		}
 		os << std::endl;
