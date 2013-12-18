@@ -250,22 +250,18 @@ void Computation::setBoundaryP(GridFunction& p) {
 }
 void Computation::setBoundaryF(GridFunction& f, GridFunction& u) {
 	MultiIndexType begin, end;
-	//if (SimIO.para.world_rank == 0) {
-		//F_0,j=u_0,j
 		begin[0] = 0;
 		end[0] = 0;
 		begin[1] = 1;
 		end[1] = f.griddimension[1] - 2;
 		f.SetGridFunction(begin, end, 1.0, u);
-	//}
-	//if (SimIO.para.world_rank == 1) {
+
 // F_iMax,j=u_iMax+1,j
 		begin[0] = f.griddimension[0] - 2;
 		end[0] = f.griddimension[0] - 2;
 		begin[1] = 1;
 		end[1] = f.griddimension[1] - 2;
 		f.SetGridFunction(begin, end, 1.0, u);
-	//}
 }
 void Computation::setBoundaryG(GridFunction& g, GridFunction& v) {
 

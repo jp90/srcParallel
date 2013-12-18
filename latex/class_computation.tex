@@ -1,0 +1,236 @@
+\hypertarget{class_computation}{\section{Computation Class Reference}
+\label{class_computation}\index{Computation@{Computation}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_computation_afb63126d5f8b4eeae8ac39fa7be52b23}{{\bfseries Computation} (\hyperlink{class_i_o}{I\-O} \&Sim\-I\-O)}\label{class_computation_afb63126d5f8b4eeae8ac39fa7be52b23}
+
+\item 
+Real\-Type \hyperlink{class_computation_a5315aae8f2cc828435c20f89082438d0}{compute\-Timesstep} (Real\-Type u\-Max, Real\-Type v\-Max)
+\begin{DoxyCompactList}\small\item\em \hyperlink{class_computation}{Computation} of time step size. \end{DoxyCompactList}\item 
+void \hyperlink{class_computation_ae443fb8d9329df8460a3a2c898cc7a61}{compute\-New\-Velocities} (\hyperlink{class_grid_function}{Grid\-Function} \&u, \hyperlink{class_grid_function}{Grid\-Function} \&v, \hyperlink{class_grid_function}{Grid\-Function} \&f, \hyperlink{class_grid_function}{Grid\-Function} \&g, \hyperlink{class_grid_function}{Grid\-Function} \&p, Real\-Type delta\-T)
+\begin{DoxyCompactList}\small\item\em Computes the new velocites u and v. \end{DoxyCompactList}\item 
+void \hyperlink{class_computation_a89bb9373807439f68bafc74e67a4d38c}{compute\-Momentum\-Equations} (\hyperlink{class_grid_function}{Grid\-Function} \&f, \hyperlink{class_grid_function}{Grid\-Function} \&g, \hyperlink{class_grid_function}{Grid\-Function} \&u, \hyperlink{class_grid_function}{Grid\-Function} \&v, \hyperlink{class_grid_function}{Grid\-Function} \&gx, \hyperlink{class_grid_function}{Grid\-Function} \&gy, Real\-Type \&delta\-T)
+\begin{DoxyCompactList}\small\item\em Computes the momentums f and g. \end{DoxyCompactList}\item 
+void \hyperlink{class_computation_a9f8ae5f9990bc96f6cbe68e7965f8f5e}{set\-Boundary\-U} (\hyperlink{class_grid_function}{Grid\-Function} \&u)
+\begin{DoxyCompactList}\small\item\em Sets the boundary values for u. \end{DoxyCompactList}\item 
+void \hyperlink{class_computation_a95a948a82d9574cdee21e61bfca76f94}{set\-Boundary\-V} (\hyperlink{class_grid_function}{Grid\-Function} \&v)
+\begin{DoxyCompactList}\small\item\em Sets the boundary values for v. \end{DoxyCompactList}\item 
+void \hyperlink{class_computation_a43d0b65ed6493243d7a7eb6a47f0d93c}{set\-Boundary\-P} (\hyperlink{class_grid_function}{Grid\-Function} \&p)
+\begin{DoxyCompactList}\small\item\em Sets the boundary values for p. \end{DoxyCompactList}\item 
+void \hyperlink{class_computation_a9a5f1ebff2fb7f3fc4690c26b34ad2a8}{set\-Boundary\-F} (\hyperlink{class_grid_function}{Grid\-Function} \&f, \hyperlink{class_grid_function}{Grid\-Function} \&u)
+\begin{DoxyCompactList}\small\item\em Sets the boundary values for f. \end{DoxyCompactList}\item 
+void \hyperlink{class_computation_ae4105e9c89e6a8d28f79f13dcea1df26}{set\-Boundary\-G} (\hyperlink{class_grid_function}{Grid\-Function} \&g, \hyperlink{class_grid_function}{Grid\-Function} \&v)
+\begin{DoxyCompactList}\small\item\em Sets the boundary values for g. \end{DoxyCompactList}\item 
+void \hyperlink{class_computation_a6596833e2001d82c870fd09fa4d6d566}{compute\-Righthand\-Side} (\hyperlink{class_grid_function}{Grid\-Function} \&rhs, \hyperlink{class_grid_function}{Grid\-Function} \&f, \hyperlink{class_grid_function}{Grid\-Function} \&g, Real\-Type delta\-T)
+\begin{DoxyCompactList}\small\item\em Computes the right hands side (rhs) of the pressure equation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_computation_a185aaf3c9010df79df3e893ebfd0e80b}{\hyperlink{class_i_o}{I\-O} {\bfseries Sim\-I\-O}}\label{class_computation_a185aaf3c9010df79df3e893ebfd0e80b}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_computation_a89bb9373807439f68bafc74e67a4d38c}{\index{Computation@{Computation}!compute\-Momentum\-Equations@{compute\-Momentum\-Equations}}
+\index{compute\-Momentum\-Equations@{compute\-Momentum\-Equations}!Computation@{Computation}}
+\subsubsection[{compute\-Momentum\-Equations}]{\setlength{\rightskip}{0pt plus 5cm}void Computation\-::compute\-Momentum\-Equations (
+\begin{DoxyParamCaption}
+\item[{{\bf Grid\-Function} \&}]{f, }
+\item[{{\bf Grid\-Function} \&}]{g, }
+\item[{{\bf Grid\-Function} \&}]{u, }
+\item[{{\bf Grid\-Function} \&}]{v, }
+\item[{{\bf Grid\-Function} \&}]{gx, }
+\item[{{\bf Grid\-Function} \&}]{gy, }
+\item[{Real\-Type \&}]{delta\-T}
+\end{DoxyParamCaption}
+)}}\label{class_computation_a89bb9373807439f68bafc74e67a4d38c}
+
+
+Computes the momentums f and g. 
+
+Computes the momentums f and g. 
+\begin{DoxyParams}{Parameters}
+{\em u} & velocity in x-\/direction \\
+\hline
+{\em v} & velocity in y-\/direction \\
+\hline
+{\em f} & \\
+\hline
+{\em g} & \\
+\hline
+{\em gx} & external force in x-\/direction \\
+\hline
+{\em gy} & external force in y-\/direction \\
+\hline
+{\em delta\-T} & \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_computation_ae443fb8d9329df8460a3a2c898cc7a61}{\index{Computation@{Computation}!compute\-New\-Velocities@{compute\-New\-Velocities}}
+\index{compute\-New\-Velocities@{compute\-New\-Velocities}!Computation@{Computation}}
+\subsubsection[{compute\-New\-Velocities}]{\setlength{\rightskip}{0pt plus 5cm}void Computation\-::compute\-New\-Velocities (
+\begin{DoxyParamCaption}
+\item[{{\bf Grid\-Function} \&}]{u, }
+\item[{{\bf Grid\-Function} \&}]{v, }
+\item[{{\bf Grid\-Function} \&}]{f, }
+\item[{{\bf Grid\-Function} \&}]{g, }
+\item[{{\bf Grid\-Function} \&}]{p, }
+\item[{Real\-Type}]{delta\-T}
+\end{DoxyParamCaption}
+)}}\label{class_computation_ae443fb8d9329df8460a3a2c898cc7a61}
+
+
+Computes the new velocites u and v. 
+
+Computes the new velocities u and v using the pressure p, time step size delta\-T and f,g. 
+\begin{DoxyParams}{Parameters}
+{\em u} & velocity in x-\/direction \\
+\hline
+{\em v} & velocity in y-\/direction \\
+\hline
+{\em f} & \\
+\hline
+{\em g} & \\
+\hline
+{\em p} & pressure \\
+\hline
+{\em delta\-T} & time step size \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_computation_a6596833e2001d82c870fd09fa4d6d566}{\index{Computation@{Computation}!compute\-Righthand\-Side@{compute\-Righthand\-Side}}
+\index{compute\-Righthand\-Side@{compute\-Righthand\-Side}!Computation@{Computation}}
+\subsubsection[{compute\-Righthand\-Side}]{\setlength{\rightskip}{0pt plus 5cm}void Computation\-::compute\-Righthand\-Side (
+\begin{DoxyParamCaption}
+\item[{{\bf Grid\-Function} \&}]{rhs, }
+\item[{{\bf Grid\-Function} \&}]{f, }
+\item[{{\bf Grid\-Function} \&}]{g, }
+\item[{Real\-Type}]{delta\-T}
+\end{DoxyParamCaption}
+)}}\label{class_computation_a6596833e2001d82c870fd09fa4d6d566}
+
+
+Computes the right hands side (rhs) of the pressure equation. 
+
+Computes the right hands side (rhs) of the pressure equation. 
+\begin{DoxyParams}{Parameters}
+{\em rhs} & value of right hand side \\
+\hline
+{\em f} & \\
+\hline
+{\em g} & \\
+\hline
+{\em delta\-T} & time step size \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_computation_a5315aae8f2cc828435c20f89082438d0}{\index{Computation@{Computation}!compute\-Timesstep@{compute\-Timesstep}}
+\index{compute\-Timesstep@{compute\-Timesstep}!Computation@{Computation}}
+\subsubsection[{compute\-Timesstep}]{\setlength{\rightskip}{0pt plus 5cm}Real\-Type Computation\-::compute\-Timesstep (
+\begin{DoxyParamCaption}
+\item[{Real\-Type}]{u\-Max, }
+\item[{Real\-Type}]{v\-Max}
+\end{DoxyParamCaption}
+)}}\label{class_computation_a5315aae8f2cc828435c20f89082438d0}
+
+
+\hyperlink{class_computation}{Computation} of time step size. 
+
+Computes the time step size delta\-T using the maximum velocities u\-Max and v\-Max. 
+\begin{DoxyParams}{Parameters}
+{\em u\-Max} & maximum velocity stored in u \\
+\hline
+{\em v\-Max} & maximum velocity stored in v \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+delta\-T time step size 
+\end{DoxyReturn}
+\hypertarget{class_computation_a9a5f1ebff2fb7f3fc4690c26b34ad2a8}{\index{Computation@{Computation}!set\-Boundary\-F@{set\-Boundary\-F}}
+\index{set\-Boundary\-F@{set\-Boundary\-F}!Computation@{Computation}}
+\subsubsection[{set\-Boundary\-F}]{\setlength{\rightskip}{0pt plus 5cm}void Computation\-::set\-Boundary\-F (
+\begin{DoxyParamCaption}
+\item[{{\bf Grid\-Function} \&}]{f, }
+\item[{{\bf Grid\-Function} \&}]{u}
+\end{DoxyParamCaption}
+)}}\label{class_computation_a9a5f1ebff2fb7f3fc4690c26b34ad2a8}
+
+
+Sets the boundary values for f. 
+
+Sets the boundary values for f. 
+\begin{DoxyParams}{Parameters}
+{\em f} & \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_computation_ae4105e9c89e6a8d28f79f13dcea1df26}{\index{Computation@{Computation}!set\-Boundary\-G@{set\-Boundary\-G}}
+\index{set\-Boundary\-G@{set\-Boundary\-G}!Computation@{Computation}}
+\subsubsection[{set\-Boundary\-G}]{\setlength{\rightskip}{0pt plus 5cm}void Computation\-::set\-Boundary\-G (
+\begin{DoxyParamCaption}
+\item[{{\bf Grid\-Function} \&}]{g, }
+\item[{{\bf Grid\-Function} \&}]{v}
+\end{DoxyParamCaption}
+)}}\label{class_computation_ae4105e9c89e6a8d28f79f13dcea1df26}
+
+
+Sets the boundary values for g. 
+
+Sets the boundary values for g. 
+\begin{DoxyParams}{Parameters}
+{\em g} & \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_computation_a43d0b65ed6493243d7a7eb6a47f0d93c}{\index{Computation@{Computation}!set\-Boundary\-P@{set\-Boundary\-P}}
+\index{set\-Boundary\-P@{set\-Boundary\-P}!Computation@{Computation}}
+\subsubsection[{set\-Boundary\-P}]{\setlength{\rightskip}{0pt plus 5cm}void Computation\-::set\-Boundary\-P (
+\begin{DoxyParamCaption}
+\item[{{\bf Grid\-Function} \&}]{p}
+\end{DoxyParamCaption}
+)}}\label{class_computation_a43d0b65ed6493243d7a7eb6a47f0d93c}
+
+
+Sets the boundary values for p. 
+
+Sets the boundary values for p. 
+\begin{DoxyParams}{Parameters}
+{\em p} & pressure \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_computation_a9f8ae5f9990bc96f6cbe68e7965f8f5e}{\index{Computation@{Computation}!set\-Boundary\-U@{set\-Boundary\-U}}
+\index{set\-Boundary\-U@{set\-Boundary\-U}!Computation@{Computation}}
+\subsubsection[{set\-Boundary\-U}]{\setlength{\rightskip}{0pt plus 5cm}void Computation\-::set\-Boundary\-U (
+\begin{DoxyParamCaption}
+\item[{{\bf Grid\-Function} \&}]{u}
+\end{DoxyParamCaption}
+)}}\label{class_computation_a9f8ae5f9990bc96f6cbe68e7965f8f5e}
+
+
+Sets the boundary values for u. 
+
+Sets the boundary values for u. 
+\begin{DoxyParams}{Parameters}
+{\em u} & velocity in x-\/direction \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_computation_a95a948a82d9574cdee21e61bfca76f94}{\index{Computation@{Computation}!set\-Boundary\-V@{set\-Boundary\-V}}
+\index{set\-Boundary\-V@{set\-Boundary\-V}!Computation@{Computation}}
+\subsubsection[{set\-Boundary\-V}]{\setlength{\rightskip}{0pt plus 5cm}void Computation\-::set\-Boundary\-V (
+\begin{DoxyParamCaption}
+\item[{{\bf Grid\-Function} \&}]{v}
+\end{DoxyParamCaption}
+)}}\label{class_computation_a95a948a82d9574cdee21e61bfca76f94}
+
+
+Sets the boundary values for v. 
+
+Sets the boundary values for v. 
+\begin{DoxyParams}{Parameters}
+{\em v} & velocity in y-\/direction \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+computation.\-h\item 
+computation.\-cpp\end{DoxyCompactItemize}
