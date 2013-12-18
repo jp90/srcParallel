@@ -16,7 +16,7 @@
 class IO {
 public:
 
-	/*! Construktor
+	/*! Constructor
 	 * @param input Path to the file with the simulation parameters.
 	 * @param outout Path to the directory for the vtk files.
 	 */
