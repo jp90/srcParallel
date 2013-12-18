@@ -1,0 +1,363 @@
+\hypertarget{classGridFunction}{\section{Grid\-Function Class Reference}
+\label{classGridFunction}\index{Grid\-Function@{Grid\-Function}}
+}
+
+
+The class implements the \hyperlink{classIO}{I\-O}.  
+
+
+
+
+{\ttfamily \#include $<$gridfunction.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classGridFunction_a798c74f3481fc35a7ce39e2136fc96c5}{Grid\-Function} (int dim\-X, int dim\-Y)
+\begin{DoxyCompactList}\small\item\em Allocates a grid. \end{DoxyCompactList}\item 
+\hyperlink{classGridFunction_a7e13b13c332e7278317d927271d8f495}{Grid\-Function} (const \hyperlink{classArray}{Multi\-Index\-Type} griddimension)
+\begin{DoxyCompactList}\small\item\em Allocates a grid. \end{DoxyCompactList}\item 
+\hyperlink{classGridFunction_abb09063b794d6180c5ef65e1c2e7cc23}{$\sim$\-Grid\-Function} ()
+\begin{DoxyCompactList}\small\item\em Deallocates a grid. \end{DoxyCompactList}\item 
+Grid\-Function\-Type \hyperlink{classGridFunction_a22f2c9d48993df03e959bbe74569660a}{get\-Grid\-Function} ()
+\begin{DoxyCompactList}\small\item\em Points on the gridfunction. \end{DoxyCompactList}\item 
+void \hyperlink{classGridFunction_a64fce241fb08877d1b8289fe755c2a2f}{Set\-Grid\-Function} (const \hyperlink{classArray}{Multi\-Index\-Type} \&begin, const \hyperlink{classArray}{Multi\-Index\-Type} \&end, Real\-Type value)
+\begin{DoxyCompactList}\small\item\em Sets entries to a certain value. \end{DoxyCompactList}\item 
+void \hyperlink{classGridFunction_adc4e126ab14dd32a55243cb75b1c2083}{Set\-Grid\-Function} (const \hyperlink{classArray}{Multi\-Index\-Type} \&begin, const \hyperlink{classArray}{Multi\-Index\-Type} \&end, Real\-Type factor, \hyperlink{classArray}{Multi\-Index\-Type} \&offset)
+\begin{DoxyCompactList}\small\item\em Sets entries to a certain value. \end{DoxyCompactList}\item 
+void \hyperlink{classGridFunction_a8970655a48c5af01d053593bdd475068}{Scale\-Grid\-Function} (const \hyperlink{classArray}{Multi\-Index\-Type} \&begin, const \hyperlink{classArray}{Multi\-Index\-Type} \&end, Real\-Type factor)
+\begin{DoxyCompactList}\small\item\em Scales entries by a certain value. \end{DoxyCompactList}\item 
+void \hyperlink{classGridFunction_a7d8edd7866f90b7c2f2c4ec0de9e4c3f}{Set\-Grid\-Function} (const \hyperlink{classArray}{Multi\-Index\-Type} \&begin, const \hyperlink{classArray}{Multi\-Index\-Type} \&end, Real\-Type factor, \hyperlink{classGridFunction}{Grid\-Function} \&sourcegrid\-Function)
+\begin{DoxyCompactList}\small\item\em Sets entries to a certain value. \end{DoxyCompactList}\item 
+void \hyperlink{classGridFunction_a6569012ef6320b82d010459993dbdb19}{Set\-Grid\-Function} (const \hyperlink{classArray}{Multi\-Index\-Type} \&begin, const \hyperlink{classArray}{Multi\-Index\-Type} \&end, Real\-Type factor, \hyperlink{classGridFunction}{Grid\-Function} \&sourcegrid\-Function, \hyperlink{classArray}{Multi\-Index\-Type} \&offset)
+\begin{DoxyCompactList}\small\item\em Sets entries to a certain value. \end{DoxyCompactList}\item 
+void \hyperlink{classGridFunction_a0890154fd279cf93ae794924c8684d58}{Set\-Grid\-Function} (const \hyperlink{classArray}{Multi\-Index\-Type} \&begin, const \hyperlink{classArray}{Multi\-Index\-Type} \&end, Real\-Type factor, \hyperlink{classGridFunction}{Grid\-Function} \&sourcegrid\-Function, \hyperlink{classArray}{Multi\-Index\-Type} \&offset, Real\-Type constant)
+\begin{DoxyCompactList}\small\item\em Sets entries to a certain value. \end{DoxyCompactList}\item 
+void \hyperlink{classGridFunction_a756e723cad5230def9848b32eba10d88}{Add\-To\-Grid\-Function} (const \hyperlink{classArray}{Multi\-Index\-Type} \&begin, const \hyperlink{classArray}{Multi\-Index\-Type} \&end, Real\-Type factor, \hyperlink{classGridFunction}{Grid\-Function} \&sourcegrid\-Function)
+\begin{DoxyCompactList}\small\item\em Sets entries to a certain value. \end{DoxyCompactList}\item 
+Real\-Type \hyperlink{classGridFunction_a430e498104762b7502bb095db0973aed}{Max\-Value\-Grid\-Function} (const \hyperlink{classArray}{Multi\-Index\-Type} \&begin, const \hyperlink{classArray}{Multi\-Index\-Type} \&end)
+\begin{DoxyCompactList}\small\item\em Returns the maximum value. \end{DoxyCompactList}\item 
+void \hyperlink{classGridFunction_a2661f54b4e5be6b1cc0420c2ffb63b3b}{Multiply\-Grid\-Functions} (const \hyperlink{classArray}{Multi\-Index\-Type} \&begin, const \hyperlink{classArray}{Multi\-Index\-Type} \&end, \hyperlink{classGridFunction}{Grid\-Function} \&sourcegrid\-Function)
+\begin{DoxyCompactList}\small\item\em Sets entries to a certain value. \end{DoxyCompactList}\item 
+void \hyperlink{classGridFunction_a438366ad02bfeaf9e4171f74c019a71b}{Grid\-\_\-\-Print} ()
+\begin{DoxyCompactList}\small\item\em Prints a gridfunction. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classGridFunction_a5867918365aab37ead25cd3ebfc846e4}{Grid\-Function\-Type {\bfseries gridfunction}}\label{classGridFunction_a5867918365aab37ead25cd3ebfc846e4}
+
+\item 
+\hypertarget{classGridFunction_a4f0b5b147512e4307b0b3fc777d0b200}{\hyperlink{classArray}{Multi\-Index\-Type} {\bfseries griddimension}}\label{classGridFunction_a4f0b5b147512e4307b0b3fc777d0b200}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The class implements the \hyperlink{classIO}{I\-O}. 
+
+\begin{DoxyAuthor}{Author}
+sina,jp,dave 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2013 
+\end{DoxyDate}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classGridFunction_a798c74f3481fc35a7ce39e2136fc96c5}{\index{Grid\-Function@{Grid\-Function}!Grid\-Function@{Grid\-Function}}
+\index{Grid\-Function@{Grid\-Function}!GridFunction@{Grid\-Function}}
+\subsubsection[{Grid\-Function}]{\setlength{\rightskip}{0pt plus 5cm}Grid\-Function\-::\-Grid\-Function (
+\begin{DoxyParamCaption}
+\item[{int}]{dim\-X, }
+\item[{int}]{dim\-Y}
+\end{DoxyParamCaption}
+)}}\label{classGridFunction_a798c74f3481fc35a7ce39e2136fc96c5}
+
+
+Allocates a grid. 
+
+Allocates a grid \mbox{[}0, dim\-X -\/ 1\mbox{]}\mbox{[}0, dim\-Y -\/1\mbox{]} with the data type 'Real\-Type'. 
+\begin{DoxyParams}{Parameters}
+{\em dim\-X} & grid dimension in x-\/direction \\
+\hline
+{\em dim\-Y} & grid dimension in y-\/direction \\
+\hline
+\end{DoxyParams}
+\hypertarget{classGridFunction_a7e13b13c332e7278317d927271d8f495}{\index{Grid\-Function@{Grid\-Function}!Grid\-Function@{Grid\-Function}}
+\index{Grid\-Function@{Grid\-Function}!GridFunction@{Grid\-Function}}
+\subsubsection[{Grid\-Function}]{\setlength{\rightskip}{0pt plus 5cm}Grid\-Function\-::\-Grid\-Function (
+\begin{DoxyParamCaption}
+\item[{const {\bf Multi\-Index\-Type}}]{griddimension}
+\end{DoxyParamCaption}
+)}}\label{classGridFunction_a7e13b13c332e7278317d927271d8f495}
+
+
+Allocates a grid. 
+
+Allocates a grid \mbox{[}0, griddimension\mbox{[}0\mbox{]} -\/ 1\mbox{]}\mbox{[}0, griddimension\mbox{[}1\mbox{]} -\/1\mbox{]} with the data type 'Real\-Type'. 
+\begin{DoxyParams}{Parameters}
+{\em griddimension} & vector holding the grid dimensions in x-\/ and y-\/direction \\
+\hline
+\end{DoxyParams}
+\hypertarget{classGridFunction_abb09063b794d6180c5ef65e1c2e7cc23}{\index{Grid\-Function@{Grid\-Function}!$\sim$\-Grid\-Function@{$\sim$\-Grid\-Function}}
+\index{$\sim$\-Grid\-Function@{$\sim$\-Grid\-Function}!GridFunction@{Grid\-Function}}
+\subsubsection[{$\sim$\-Grid\-Function}]{\setlength{\rightskip}{0pt plus 5cm}Grid\-Function\-::$\sim$\-Grid\-Function (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classGridFunction_abb09063b794d6180c5ef65e1c2e7cc23}
+
+
+Deallocates a grid. 
+
+Deallocates memory which was allocated before with the method \hyperlink{classGridFunction}{Grid\-Function}. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classGridFunction_a756e723cad5230def9848b32eba10d88}{\index{Grid\-Function@{Grid\-Function}!Add\-To\-Grid\-Function@{Add\-To\-Grid\-Function}}
+\index{Add\-To\-Grid\-Function@{Add\-To\-Grid\-Function}!GridFunction@{Grid\-Function}}
+\subsubsection[{Add\-To\-Grid\-Function}]{\setlength{\rightskip}{0pt plus 5cm}void Grid\-Function\-::\-Add\-To\-Grid\-Function (
+\begin{DoxyParamCaption}
+\item[{const {\bf Multi\-Index\-Type} \&}]{begin, }
+\item[{const {\bf Multi\-Index\-Type} \&}]{end, }
+\item[{Real\-Type}]{factor, }
+\item[{{\bf Grid\-Function} \&}]{sourcegrid\-Function}
+\end{DoxyParamCaption}
+)}}\label{classGridFunction_a756e723cad5230def9848b32eba10d88}
+
+
+Sets entries to a certain value. 
+
+Takes entries of a certain domain of a given Gridfunction, multiplies them with a given value and writes the results into another given domain in the original Gridfunction. 
+\begin{DoxyParams}{Parameters}
+{\em begin} & grid coordinates of the top left corner of the domain where the grid function is set \\
+\hline
+{\em end} & grid coordinates of the bottom right corner of the domain where the grid function is set \\
+\hline
+{\em factor} & value by which the entries in the given domain are multiplied \\
+\hline
+\end{DoxyParams}
+\hypertarget{classGridFunction_a22f2c9d48993df03e959bbe74569660a}{\index{Grid\-Function@{Grid\-Function}!get\-Grid\-Function@{get\-Grid\-Function}}
+\index{get\-Grid\-Function@{get\-Grid\-Function}!GridFunction@{Grid\-Function}}
+\subsubsection[{get\-Grid\-Function}]{\setlength{\rightskip}{0pt plus 5cm}Grid\-Function\-Type Grid\-Function\-::get\-Grid\-Function (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classGridFunction_a22f2c9d48993df03e959bbe74569660a}
+
+
+Points on the gridfunction. 
+
+Returns a pointer on the gridfunction. \hypertarget{classGridFunction_a438366ad02bfeaf9e4171f74c019a71b}{\index{Grid\-Function@{Grid\-Function}!Grid\-\_\-\-Print@{Grid\-\_\-\-Print}}
+\index{Grid\-\_\-\-Print@{Grid\-\_\-\-Print}!GridFunction@{Grid\-Function}}
+\subsubsection[{Grid\-\_\-\-Print}]{\setlength{\rightskip}{0pt plus 5cm}void Grid\-Function\-::\-Grid\-\_\-\-Print (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classGridFunction_a438366ad02bfeaf9e4171f74c019a71b}
+
+
+Prints a gridfunction. 
+
+Prints the given gridfunction as a matrix. \hypertarget{classGridFunction_a430e498104762b7502bb095db0973aed}{\index{Grid\-Function@{Grid\-Function}!Max\-Value\-Grid\-Function@{Max\-Value\-Grid\-Function}}
+\index{Max\-Value\-Grid\-Function@{Max\-Value\-Grid\-Function}!GridFunction@{Grid\-Function}}
+\subsubsection[{Max\-Value\-Grid\-Function}]{\setlength{\rightskip}{0pt plus 5cm}Real\-Type Grid\-Function\-::\-Max\-Value\-Grid\-Function (
+\begin{DoxyParamCaption}
+\item[{const {\bf Multi\-Index\-Type} \&}]{begin, }
+\item[{const {\bf Multi\-Index\-Type} \&}]{end}
+\end{DoxyParamCaption}
+)}}\label{classGridFunction_a430e498104762b7502bb095db0973aed}
+
+
+Returns the maximum value. 
+
+Returns the maximum value within the given gridfunction. 
+\begin{DoxyParams}{Parameters}
+{\em begin} & grid coordinates of the top left corner of the domain where the grid function is set \\
+\hline
+{\em end} & grid coordinates of the bottom right corner of the domain where the grid function is set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Maximum value 
+\end{DoxyReturn}
+\hypertarget{classGridFunction_a2661f54b4e5be6b1cc0420c2ffb63b3b}{\index{Grid\-Function@{Grid\-Function}!Multiply\-Grid\-Functions@{Multiply\-Grid\-Functions}}
+\index{Multiply\-Grid\-Functions@{Multiply\-Grid\-Functions}!GridFunction@{Grid\-Function}}
+\subsubsection[{Multiply\-Grid\-Functions}]{\setlength{\rightskip}{0pt plus 5cm}void Grid\-Function\-::\-Multiply\-Grid\-Functions (
+\begin{DoxyParamCaption}
+\item[{const {\bf Multi\-Index\-Type} \&}]{begin, }
+\item[{const {\bf Multi\-Index\-Type} \&}]{end, }
+\item[{{\bf Grid\-Function} \&}]{sourcegrid\-Function}
+\end{DoxyParamCaption}
+)}}\label{classGridFunction_a2661f54b4e5be6b1cc0420c2ffb63b3b}
+
+
+Sets entries to a certain value. 
+
+Multiplies the values of the given gridfunction by the values in the sourcegridfunction. 
+\begin{DoxyParams}{Parameters}
+{\em begin} & grid coordinates of the top left corner of the domain where the grid function is set \\
+\hline
+{\em end} & grid coordinates of the bottom right corner of the domain where the grid function is set \\
+\hline
+{\em sourcegridfunction} & source of the values multiplied by a given factor \\
+\hline
+\end{DoxyParams}
+\hypertarget{classGridFunction_a8970655a48c5af01d053593bdd475068}{\index{Grid\-Function@{Grid\-Function}!Scale\-Grid\-Function@{Scale\-Grid\-Function}}
+\index{Scale\-Grid\-Function@{Scale\-Grid\-Function}!GridFunction@{Grid\-Function}}
+\subsubsection[{Scale\-Grid\-Function}]{\setlength{\rightskip}{0pt plus 5cm}void Grid\-Function\-::\-Scale\-Grid\-Function (
+\begin{DoxyParamCaption}
+\item[{const {\bf Multi\-Index\-Type} \&}]{begin, }
+\item[{const {\bf Multi\-Index\-Type} \&}]{end, }
+\item[{Real\-Type}]{factor}
+\end{DoxyParamCaption}
+)}}\label{classGridFunction_a8970655a48c5af01d053593bdd475068}
+
+
+Scales entries by a certain value. 
+
+Scales all entries in a rectangular domain by a certain value. 
+\begin{DoxyParams}{Parameters}
+{\em begin} & grid coordinates of the top left corner of the domain where the grid function is set \\
+\hline
+{\em end} & grid coordinates of the bottom right corner of the domain where the grid function is set \\
+\hline
+{\em factor} & value by which the entries in the given domain are multiplied \\
+\hline
+\end{DoxyParams}
+\hypertarget{classGridFunction_a64fce241fb08877d1b8289fe755c2a2f}{\index{Grid\-Function@{Grid\-Function}!Set\-Grid\-Function@{Set\-Grid\-Function}}
+\index{Set\-Grid\-Function@{Set\-Grid\-Function}!GridFunction@{Grid\-Function}}
+\subsubsection[{Set\-Grid\-Function}]{\setlength{\rightskip}{0pt plus 5cm}void Grid\-Function\-::\-Set\-Grid\-Function (
+\begin{DoxyParamCaption}
+\item[{const {\bf Multi\-Index\-Type} \&}]{begin, }
+\item[{const {\bf Multi\-Index\-Type} \&}]{end, }
+\item[{Real\-Type}]{value}
+\end{DoxyParamCaption}
+)}}\label{classGridFunction_a64fce241fb08877d1b8289fe755c2a2f}
+
+
+Sets entries to a certain value. 
+
+Sets all entries in a rectangular domain to a given value. 
+\begin{DoxyParams}{Parameters}
+{\em begin} & grid coordinates of the top left corner of the domain where the grid function is set \\
+\hline
+{\em end} & grid coordinates of the bottom right corner of the domain where the grid function is set \\
+\hline
+{\em value} & value which is set in the given domain \\
+\hline
+\end{DoxyParams}
+\hypertarget{classGridFunction_adc4e126ab14dd32a55243cb75b1c2083}{\index{Grid\-Function@{Grid\-Function}!Set\-Grid\-Function@{Set\-Grid\-Function}}
+\index{Set\-Grid\-Function@{Set\-Grid\-Function}!GridFunction@{Grid\-Function}}
+\subsubsection[{Set\-Grid\-Function}]{\setlength{\rightskip}{0pt plus 5cm}void Grid\-Function\-::\-Set\-Grid\-Function (
+\begin{DoxyParamCaption}
+\item[{const {\bf Multi\-Index\-Type} \&}]{begin, }
+\item[{const {\bf Multi\-Index\-Type} \&}]{end, }
+\item[{Real\-Type}]{factor, }
+\item[{{\bf Multi\-Index\-Type} \&}]{offset}
+\end{DoxyParamCaption}
+)}}\label{classGridFunction_adc4e126ab14dd32a55243cb75b1c2083}
+
+
+Sets entries to a certain value. 
+
+Takes the entries in a certain domain of the Gridfunction and multiplies them with a given factor. The entries within another given domain are set to these values. 
+\begin{DoxyParams}{Parameters}
+{\em begin} & grid coordinates of the top left corner of the domain where the grid function is set \\
+\hline
+{\em end} & grid coordinates of the bottom right corner of the domain where the grid function is set \\
+\hline
+{\em factor} & factor with which the entries are multiplied \\
+\hline
+{\em offset} & determines the domain which is multiplied with the given factor \\
+\hline
+\end{DoxyParams}
+\hypertarget{classGridFunction_a7d8edd7866f90b7c2f2c4ec0de9e4c3f}{\index{Grid\-Function@{Grid\-Function}!Set\-Grid\-Function@{Set\-Grid\-Function}}
+\index{Set\-Grid\-Function@{Set\-Grid\-Function}!GridFunction@{Grid\-Function}}
+\subsubsection[{Set\-Grid\-Function}]{\setlength{\rightskip}{0pt plus 5cm}void Grid\-Function\-::\-Set\-Grid\-Function (
+\begin{DoxyParamCaption}
+\item[{const {\bf Multi\-Index\-Type} \&}]{begin, }
+\item[{const {\bf Multi\-Index\-Type} \&}]{end, }
+\item[{Real\-Type}]{factor, }
+\item[{{\bf Grid\-Function} \&}]{sourcegrid\-Function}
+\end{DoxyParamCaption}
+)}}\label{classGridFunction_a7d8edd7866f90b7c2f2c4ec0de9e4c3f}
+
+
+Sets entries to a certain value. 
+
+Takes entries of a certain domain of a given Gridfunction, multiplies them with a given value and writes the results into the original Gridfunction. 
+\begin{DoxyParams}{Parameters}
+{\em begin} & grid coordinates of the top left corner of the domain where the grid function is set \\
+\hline
+{\em end} & grid coordinates of the bottom right corner of the domain where the grid function is set \\
+\hline
+{\em factor} & value by which the entries in the given domain are multiplied \\
+\hline
+{\em sourcegridfunction} & source of the values multiplied by a given factor \\
+\hline
+\end{DoxyParams}
+\hypertarget{classGridFunction_a6569012ef6320b82d010459993dbdb19}{\index{Grid\-Function@{Grid\-Function}!Set\-Grid\-Function@{Set\-Grid\-Function}}
+\index{Set\-Grid\-Function@{Set\-Grid\-Function}!GridFunction@{Grid\-Function}}
+\subsubsection[{Set\-Grid\-Function}]{\setlength{\rightskip}{0pt plus 5cm}void Grid\-Function\-::\-Set\-Grid\-Function (
+\begin{DoxyParamCaption}
+\item[{const {\bf Multi\-Index\-Type} \&}]{begin, }
+\item[{const {\bf Multi\-Index\-Type} \&}]{end, }
+\item[{Real\-Type}]{factor, }
+\item[{{\bf Grid\-Function} \&}]{sourcegrid\-Function, }
+\item[{{\bf Multi\-Index\-Type} \&}]{offset}
+\end{DoxyParamCaption}
+)}}\label{classGridFunction_a6569012ef6320b82d010459993dbdb19}
+
+
+Sets entries to a certain value. 
+
+Takes entries of a certain domain of a given Gridfunction, multiplies them with a given value and writes the results into another given domain in the original Gridfunction. 
+\begin{DoxyParams}{Parameters}
+{\em begin} & grid coordinates of the top left corner of the domain where the grid function is set \\
+\hline
+{\em end} & grid coordinates of the bottom right corner of the domain where the grid function is set \\
+\hline
+{\em factor} & value by which the entries in the given domain are multiplied \\
+\hline
+{\em sourcegridfunction} & source of the values multiplied by a given factor \\
+\hline
+{\em offset} & determines the domain which is multiplied with the given factor \\
+\hline
+\end{DoxyParams}
+\hypertarget{classGridFunction_a0890154fd279cf93ae794924c8684d58}{\index{Grid\-Function@{Grid\-Function}!Set\-Grid\-Function@{Set\-Grid\-Function}}
+\index{Set\-Grid\-Function@{Set\-Grid\-Function}!GridFunction@{Grid\-Function}}
+\subsubsection[{Set\-Grid\-Function}]{\setlength{\rightskip}{0pt plus 5cm}void Grid\-Function\-::\-Set\-Grid\-Function (
+\begin{DoxyParamCaption}
+\item[{const {\bf Multi\-Index\-Type} \&}]{begin, }
+\item[{const {\bf Multi\-Index\-Type} \&}]{end, }
+\item[{Real\-Type}]{factor, }
+\item[{{\bf Grid\-Function} \&}]{sourcegrid\-Function, }
+\item[{{\bf Multi\-Index\-Type} \&}]{offset, }
+\item[{Real\-Type}]{constant}
+\end{DoxyParamCaption}
+)}}\label{classGridFunction_a0890154fd279cf93ae794924c8684d58}
+
+
+Sets entries to a certain value. 
+
+Takes entries of a certain domain of a given Gridfunction, multiplies them with a given value, adds a constant value and writes the results into another given domain in the original Gridfunction. 
+\begin{DoxyParams}{Parameters}
+{\em begin} & grid coordinates of the top left corner of the domain where the grid function is set \\
+\hline
+{\em end} & grid coordinates of the bottom right corner of the domain where the grid function is set \\
+\hline
+{\em factor} & value by which the entries in the given domain are multiplied \\
+\hline
+{\em sourcegridfunction} & source of the values multiplied by a given factor \\
+\hline
+{\em offset} & determines the domain which is multiplied with the given factor \\
+\hline
+{\em constant} & value added to te result of the multiplication \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+gridfunction.\-h\item 
+gridfunction.\-cpp\end{DoxyCompactItemize}
