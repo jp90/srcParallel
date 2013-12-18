@@ -1,0 +1,80 @@
+\hypertarget{class_grid_function}{\section{Grid\-Function Class Reference}
+\label{class_grid_function}\index{Grid\-Function@{Grid\-Function}}
+}
+
+
+The class implements the \hyperlink{class_i_o}{I\-O}.  
+
+
+
+
+{\ttfamily \#include $<$gridfunction.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_grid_function_a798c74f3481fc35a7ce39e2136fc96c5}{{\bfseries Grid\-Function} (int dim\-X, int dim\-Y)}\label{class_grid_function_a798c74f3481fc35a7ce39e2136fc96c5}
+
+\item 
+\hypertarget{class_grid_function_a7e13b13c332e7278317d927271d8f495}{{\bfseries Grid\-Function} (const \hyperlink{class_array}{Multi\-Index\-Type} griddimension)}\label{class_grid_function_a7e13b13c332e7278317d927271d8f495}
+
+\item 
+\hypertarget{class_grid_function_a22f2c9d48993df03e959bbe74569660a}{Grid\-Function\-Type {\bfseries get\-Grid\-Function} ()}\label{class_grid_function_a22f2c9d48993df03e959bbe74569660a}
+
+\item 
+\hypertarget{class_grid_function_a64fce241fb08877d1b8289fe755c2a2f}{void {\bfseries Set\-Grid\-Function} (const \hyperlink{class_array}{Multi\-Index\-Type} \&begin, const \hyperlink{class_array}{Multi\-Index\-Type} \&end, Real\-Type value)}\label{class_grid_function_a64fce241fb08877d1b8289fe755c2a2f}
+
+\item 
+\hypertarget{class_grid_function_adc4e126ab14dd32a55243cb75b1c2083}{void {\bfseries Set\-Grid\-Function} (const \hyperlink{class_array}{Multi\-Index\-Type} \&begin, const \hyperlink{class_array}{Multi\-Index\-Type} \&end, Real\-Type factor, \hyperlink{class_array}{Multi\-Index\-Type} \&offset)}\label{class_grid_function_adc4e126ab14dd32a55243cb75b1c2083}
+
+\item 
+\hypertarget{class_grid_function_a8970655a48c5af01d053593bdd475068}{void {\bfseries Scale\-Grid\-Function} (const \hyperlink{class_array}{Multi\-Index\-Type} \&begin, const \hyperlink{class_array}{Multi\-Index\-Type} \&end, Real\-Type factor)}\label{class_grid_function_a8970655a48c5af01d053593bdd475068}
+
+\item 
+\hypertarget{class_grid_function_a7d8edd7866f90b7c2f2c4ec0de9e4c3f}{void {\bfseries Set\-Grid\-Function} (const \hyperlink{class_array}{Multi\-Index\-Type} \&begin, const \hyperlink{class_array}{Multi\-Index\-Type} \&end, Real\-Type factor, \hyperlink{class_grid_function}{Grid\-Function} \&sourcegrid\-Function)}\label{class_grid_function_a7d8edd7866f90b7c2f2c4ec0de9e4c3f}
+
+\item 
+\hypertarget{class_grid_function_a6569012ef6320b82d010459993dbdb19}{void {\bfseries Set\-Grid\-Function} (const \hyperlink{class_array}{Multi\-Index\-Type} \&begin, const \hyperlink{class_array}{Multi\-Index\-Type} \&end, Real\-Type factor, \hyperlink{class_grid_function}{Grid\-Function} \&sourcegrid\-Function, \hyperlink{class_array}{Multi\-Index\-Type} \&offset)}\label{class_grid_function_a6569012ef6320b82d010459993dbdb19}
+
+\item 
+\hypertarget{class_grid_function_a0890154fd279cf93ae794924c8684d58}{void {\bfseries Set\-Grid\-Function} (const \hyperlink{class_array}{Multi\-Index\-Type} \&begin, const \hyperlink{class_array}{Multi\-Index\-Type} \&end, Real\-Type factor, \hyperlink{class_grid_function}{Grid\-Function} \&sourcegrid\-Function, \hyperlink{class_array}{Multi\-Index\-Type} \&offset, Real\-Type constant)}\label{class_grid_function_a0890154fd279cf93ae794924c8684d58}
+
+\item 
+\hypertarget{class_grid_function_a756e723cad5230def9848b32eba10d88}{void {\bfseries Add\-To\-Grid\-Function} (const \hyperlink{class_array}{Multi\-Index\-Type} \&begin, const \hyperlink{class_array}{Multi\-Index\-Type} \&end, Real\-Type factor, \hyperlink{class_grid_function}{Grid\-Function} \&sourcegrid\-Function)}\label{class_grid_function_a756e723cad5230def9848b32eba10d88}
+
+\item 
+\hypertarget{class_grid_function_a430e498104762b7502bb095db0973aed}{Real\-Type {\bfseries Max\-Value\-Grid\-Function} (const \hyperlink{class_array}{Multi\-Index\-Type} \&begin, const \hyperlink{class_array}{Multi\-Index\-Type} \&end)}\label{class_grid_function_a430e498104762b7502bb095db0973aed}
+
+\item 
+\hypertarget{class_grid_function_a2661f54b4e5be6b1cc0420c2ffb63b3b}{void {\bfseries Multiply\-Grid\-Functions} (const \hyperlink{class_array}{Multi\-Index\-Type} \&begin, const \hyperlink{class_array}{Multi\-Index\-Type} \&end, \hyperlink{class_grid_function}{Grid\-Function} \&sourcegrid\-Function)}\label{class_grid_function_a2661f54b4e5be6b1cc0420c2ffb63b3b}
+
+\item 
+\hypertarget{class_grid_function_a438366ad02bfeaf9e4171f74c019a71b}{void {\bfseries Grid\-\_\-\-Print} ()}\label{class_grid_function_a438366ad02bfeaf9e4171f74c019a71b}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_grid_function_a5867918365aab37ead25cd3ebfc846e4}{Grid\-Function\-Type {\bfseries gridfunction}}\label{class_grid_function_a5867918365aab37ead25cd3ebfc846e4}
+
+\item 
+\hypertarget{class_grid_function_a4f0b5b147512e4307b0b3fc777d0b200}{\hyperlink{class_array}{Multi\-Index\-Type} {\bfseries griddimension}}\label{class_grid_function_a4f0b5b147512e4307b0b3fc777d0b200}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The class implements the \hyperlink{class_i_o}{I\-O}. 
+
+\begin{DoxyAuthor}{Author}
+sina,jp,dave 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2013 
+\end{DoxyDate}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+gridfunction.\-h\item 
+gridfunction.\-cpp\end{DoxyCompactItemize}

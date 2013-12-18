@@ -21,15 +21,21 @@ class Communication {
 public:
 
 
-
+	/*! \brief Exchanges p values
+	 *
+	 * Exchanges the p values between the domain's borders
+	 * @param p pressure
+	 */
 	void ExchangePValues(GridFunction& p);
-
+	/*! \brief Exchanges p values
+	 *
+	 * Exchanges the velocity values u and v between the domain's borders
+	 * @param u velocity in x-direction
+	 * @param v velocity in y-direction
+	 */
 	void ExchangeUVValues(GridFunction& u,GridFunction& v);
 	Communication(int world_rank);
-//	MPI_Comm comm_cart;
-//	int dims[size];
-//	int periods[size];
-//	int reorder;
+
 int world_rank;
 
 };
