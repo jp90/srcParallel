@@ -1,0 +1,4 @@
+all: NumSim
+
+NumSim: computation.o gridfunction.o IO.o NumSimFluidPara.o solver.o stencil.o communication.o derivatives.o
+

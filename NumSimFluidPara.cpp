@@ -21,12 +21,12 @@ int main() {
 
 	int s = 0;
 
-	char input[] = "./srcParallel/inputvals.txt";
-	char output[] = "./srcParallel/inputvals.txt";
+	char input[] = "./inputvals.txt";
+	char output[] = "./inputvals.txt";
 	IO SimIO(input, output);
 
 	IndexType n = 0;
-	RealType t = 0.0;
+	RealType time = 0.0;
 
 	MPI_Init(NULL,NULL);
 	int world_rank;
@@ -63,9 +63,13 @@ int main() {
 	begin[1] = 1;
 	end[1] = SimIO.para.jMax;
 	p.SetGridFunction(begin, end, SimIO.para.pi);
-
-	GridFunction gx(u.griddimension);
-	GridFunction gy(v.griddimension);
+	//Initialize temperature
+	GridFunction t(SimIO.para.iMax+2, SimIO.para.jMax+2);
+	begin[0] = 1;
+	end[0] = SimIO.para.iMax;
+	begin[1] = 1;
+	end[1] = SimIO.para.jMax;
+	t.SetGridFunction(begin, end, SimIO.para.TI);
 
 	GridFunction f(u.griddimension);
 	GridFunction g(v.griddimension);
@@ -94,7 +98,7 @@ int main() {
 
 
 int count=0;
-	while ((t < SimIO.para.tEnd)){
+	while ((time < SimIO.para.tEnd)){
 		SimIO.writeVTKMasterfile(global_grid,u.getGridFunction(),v.getGridFunction(),p.getGridFunction(),delta,n);
 		SimIO.writeVTKSlavefile(global_grid,u.getGridFunction(),v.getGridFunction(),p.getGridFunction(),delta,world_rank,n,n);
 
@@ -105,7 +109,6 @@ int count=0;
 
 		double deltaTmin;
 
-		//cout << "was soll des?" << endl;
 		MPI_Reduce(&deltaT,&deltaTmin,1,MPI_DOUBLE, MPI_MIN, 0, MPI_COMM_WORLD);
 		MPI_Bcast(&deltaTmin,1,MPI_DOUBLE,0,MPI_COMM_WORLD);
 	//	if(world_rank==1){sleep(s);}
@@ -118,8 +121,12 @@ int count=0;
 	//				cout << world_rank <<": nach boundary" << endl;
 	//					p.Grid_Print();
 
+		computer.computeTemperature(...);
+		computer.setBoundaryTD(t);
+		computer.setBoundaryTN(t);
+
 		// Compute F and G
-		computer.computeMomentumEquations(f, g, u, v, gx, gy, deltaTmin);
+		computer.computeMomentumEquations(f, g, u, v, t, deltaTmin);
 
 		computer.setBoundaryF(f,u);
 		computer.setBoundaryG(g,v);
@@ -197,7 +204,7 @@ int count=0;
 
 		n++;
 	//	cout << "t= " << t<< endl;
-		t += deltaTmin;
+		time += deltaTmin;
 		count++;
 	}
 	cout << "laeuft!";

@@ -36,6 +36,13 @@ void IO::readInputfile(char *filename) {
 	para.ui = 0;
 	para.vi = 0;
 	para.pi = 0;
+	para.Pr = 7.0;
+	para.beta = 2.1e-4;
+	para.TI = 0.0;
+	para.TO = 0.0;
+	para.TU = 0.0;
+    para.TL = 0.0;
+    para.TR = 0.0;
 
 	ifstream infile(filename);
 
@@ -84,6 +91,20 @@ void IO::readInputfile(char *filename) {
 			para.vi = atof(after_equ.c_str());
 		if (!before_equ.compare("pi"))
 			para.pi = atof(after_equ.c_str());
+		if (!before_equ.compare("Pr"))
+			para.Pr = atof(after_equ.c_str());
+		if (!before_equ.compare("beta"))
+			para.beta = atof(after_equ.c_str());
+		if (!before_equ.compare("TI"))
+			para.TI = atof(after_equ.c_str());
+		if (!before_equ.compare("TO"))
+			para.TO = atof(after_equ.c_str());
+		if (!before_equ.compare("TU"))
+			para.TU = atof(after_equ.c_str());
+		if (!before_equ.compare("TL"))
+			para.TL = atof(after_equ.c_str());
+		if (!before_equ.compare("TR"))
+			para.TR = atof(after_equ.c_str());
 	}
 
 }
@@ -314,6 +335,7 @@ void IO::writeVTKMasterfile(const MultiIndexType & griddimension,
 			<< "\" Source=\"" << "solution_processor_1_" << step << ".vtr"
 			<< "\" />" << std::endl << "<PPointData>" << std::endl
 			<< "<PDataArray type=\"Float64\" Name=\"p\"/>" << std::endl
+			<< "<PDataArray type=\"Float64\" Name=\"t\"/>" << std::endl
 			<< "<DataArray Name=\"field\" NumberOfComponents=\"3\" type=\"Float64\" />" << std::endl
 			<< "</PPointData>" << std::endl << "</PRectilinearGrid>"
 			<< std::endl << "</VTKFile>" << std::endl;
@@ -322,7 +344,7 @@ void IO::writeVTKMasterfile(const MultiIndexType & griddimension,
 }
 
 void IO::writeVTKSlavefile(const MultiIndexType & griddimension,
-		GridFunctionType u, GridFunctionType v, GridFunctionType p,
+		GridFunctionType u, GridFunctionType v, GridFunctionType p, GridFunctionType t,
 		const PointType & delta, int world_rank, int d, int step) {
 
 	IndexType iMax = griddimension[0];
@@ -422,7 +444,17 @@ void IO::writeVTKSlavefile(const MultiIndexType & griddimension,
 		}
 		os << std::endl;
 	}
-	// wie/wo u und v ins file schreiben??
+
+	os << "</DataArray>" << std::endl
+			<< "<DataArray type=\"Float64\" Name=\"t\" format=\"ascii\">"
+			<< std::endl;
+	for (int i = 0; i < localgriddimension[1]-1; ++i) {
+		for (int j = 0; j < localgriddimension[0]-1; ++j) {
+			os << std::scientific << t[j][i] << " ";
+		}
+		os << std::endl;
+	}
+
 	os << "</DataArray>" << std::endl
 			<< "<DataArray Name=\"field\" NumberOfComponents=\"3\" type=\"Float64\" >"
 			<< std::endl;
