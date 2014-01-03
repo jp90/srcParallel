@@ -258,15 +258,48 @@ void Stencil::setGyStencil(){
 	stencil[1][0]=-1.0/h[1];
 }
 
-void Stencil::setUTx1Stencil(){}
-void Stencil::setUTx2Stencil(){}
-void Stencil::setUTx3Stencil(){}
-void Stencil::setUTx4Stencil(){}
+void Stencil::setUTx_1Stencil(){
+	abs=false;
+	stencil[2][1]=1.0/(2.0*h[0]);
+	stencil[1][1]=1.0/(2.0*h[0]);
+}
+void Stencil::setUTx_2Stencil(){
+abs=false;
+stencil[0][1]=1.0/(2.0*h[0]);
+stencil[1][1]=1.0/(2.0*h[0]);
+}
+void Stencil::setUTx_3Stencil(){
+	abs=false;
+	stencil[1][1]=1.0/(2.0*h[0]);
+	stencil[2][1]=-1.0/(2.0*h[0]);
+}
+void Stencil::setUTx_4Stencil(){
+	abs=false;
+stencil[1][1]=-1.0/(2.0*h[0]);
+stencil[0][1]=1.0/(2.0*h[0]);
+}
 
-void Stencil::setVTy1Stencil(){}
-void Stencil::setVTy2Stencil(){}
-void Stencil::setVTy3Stencil(){}
-void Stencil::setVTy4Stencil(){}
+void Stencil::setVTy_1Stencil(){
+	abs=false;
+stencil[1][1]=1.0/(2.0*h[1]);
+stencil[1][2]=1.0/(2.0*h[1]);
+}
+void Stencil::setVTy_2Stencil(){
+	abs=false;
+stencil[1][1]=1.0/(2.0*h[1]);
+stencil[1][0]=1.0/(2.0*h[1]);
+}
+void Stencil::setVTy_3Stencil(){
+	abs=false;
+stencil[1][1]=1.0/(2.0*h[1]);
+stencil[1][2]=-1.0/(2.0*h[1]);
+}
+void Stencil::setVTy_4Stencil(){
+	abs=false;
+stencil[1][1]=1.0/(2.0*h[1]);
+stencil[1][1]=-1.0/(2.0*h[1]);
+
+}
 
 void Stencil::setTxxStencil(){}
 void Stencil::setTyyStencil(){}

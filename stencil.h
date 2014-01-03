@@ -66,15 +66,15 @@ public:
 	void setFxStencil();
 	void setGyStencil();
 
-	void setUTx1Stencil();
-	void setUTx2Stencil();
-	void setUTx3Stencil();
-	void setUTx4Stencil();
+	void setUTx_1Stencil();
+	void setUTx_2Stencil();
+	void setUTx_3Stencil();
+	void setUTx_4Stencil();
 
-	void setVTy1Stencil();
-	void setVTy2Stencil();
-	void setVTy3Stencil();
-	void setVTy4Stencil();
+	void setVTy_1Stencil();
+	void setVTy_2Stencil();
+	void setVTy_3Stencil();
+	void setVTy_4Stencil();
 
 	void setTxxStencil();
 	void setTyyStencil();
