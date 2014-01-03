@@ -301,7 +301,7 @@ void Computation::computeRighthandSide(GridFunction& rhs, GridFunction& f,
 
 }
 
-void Computation::ComputeTemperature() {
+void Computation::ComputeTemperature(GridFunction& T, GridFunction& ) {
 	GridFunction branch_1(T.griddimension);
 	MultiIndexType begin, end;
 
@@ -312,7 +312,7 @@ void Computation::ComputeTemperature() {
 	PointType delta;
 	delta[0] = SimIO.para.deltaX;
 	delta[1] = SimIO.para.deltaY;
-	UTx(rhs, f, delta);
+	UTx(rhs, T, delta);
 	VTy(branch_1, g, delta);
 
 }
