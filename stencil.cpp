@@ -296,7 +296,7 @@ stencil[1][2]=-1.0/(2.0*h[1]);
 }
 void Stencil::setVTy_4Stencil(){
 	abs=false;
-stencil[1][1]=1.0/(2.0*h[1]);
+stencil[1][0]=1.0/(2.0*h[1]);
 stencil[1][1]=-1.0/(2.0*h[1]);
 
 }
