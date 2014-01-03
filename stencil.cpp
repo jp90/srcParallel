@@ -301,5 +301,15 @@ stencil[1][1]=-1.0/(2.0*h[1]);
 
 }
 
-void Stencil::setTxxStencil(){}
-void Stencil::setTyyStencil(){}
+void Stencil::setTxxStencil(){
+	abs=false;
+	stencil[2][1]=1.0/(h[0]*h[0]);
+	stencil[1][1]=-2.0/(h[0]*h[0]);
+	stencil[0][1]=1.0/(h[0]*h[0]);
+}
+void Stencil::setTyyStencil(){
+	abs=false;
+	stencil[1][2]=1.0/(h[1]*h[1]);
+	stencil[1][1]=-2.0/(h[1]*h[1]);
+	stencil[1][0]=1.0/(h[1]*h[1]);
+}
