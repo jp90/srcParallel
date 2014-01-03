@@ -13,7 +13,7 @@
 #include "computation.h"
 #include "solver.h"
 #include <mpi.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include "communication.h"
 using namespace std;
 
@@ -83,10 +83,10 @@ int main() {
 	//Start Main Loop
 
 	computer.setBoundaryV(v);
-	if(world_rank==0){sleep(s);}
+//	if(world_rank==0){sleep(s);}
 					cout << world_rank <<": nach boundary" << endl;
 						p.Grid_Print();
-	if(world_rank==1){sleep(s);}
+//	if(world_rank==1){sleep(s);}
 					cout << world_rank <<": nach boundary" << endl;
 						p.Grid_Print();
 
@@ -130,11 +130,11 @@ int count=0;
 
 		cout<<"v"<<endl;
 		p.Grid_Print(); */
-		if(world_rank==1){sleep(s);}
+		//if(world_rank==1){(s);}
 				cout << world_rank <<": f" << endl;
 
 		f.Grid_Print();
-		if(world_rank==1){sleep(s);}
+		//if(world_rank==1){sleep(s);}
 		cout << world_rank <<": g" << endl;
 
 		g.Grid_Print();

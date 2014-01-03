@@ -1,7 +1,8 @@
 #include "IO.hpp"
 #include <iostream>
 #include <fstream>
-
+#include <istream>
+#include <string>
 using namespace std;
 
 IO::IO(char *input, char *output) {

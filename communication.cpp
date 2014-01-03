@@ -6,7 +6,7 @@
  */
 
 #include "communication.h"
-#include <unistd.h>
+//#include <unistd.h>
 Communication::Communication(int world_rank) {
 	this->world_rank = world_rank;
 }

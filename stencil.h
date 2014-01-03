@@ -21,6 +21,7 @@ public:
 			const MultiIndexType& gridwritebegin,
 			const MultiIndexType& gridwriteend,
 			GridFunction& sourcegridFunction, GridFunction& imagegridFunction);
+
 	void setUxStencil();
 	void setUyStencil();
 	void setPxStencil();
@@ -64,6 +65,19 @@ public:
 
 	void setFxStencil();
 	void setGyStencil();
+
+	void setUTx1Stencil();
+	void setUTx2Stencil();
+	void setUTx3Stencil();
+	void setUTx4Stencil();
+
+	void setVTy1Stencil();
+	void setVTy2Stencil();
+	void setVTy3Stencil();
+	void setVTy4Stencil();
+
+	void setTxxStencil();
+	void setTyyStencil();
 
 	StencilType stencil;
 	int stencilwidth;

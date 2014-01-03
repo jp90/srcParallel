@@ -257,3 +257,16 @@ void Stencil::setGyStencil(){
 	stencil[1][1]=1.0/h[1];
 	stencil[1][0]=-1.0/h[1];
 }
+
+void Stencil::setUTx1Stencil(){}
+void Stencil::setUTx2Stencil(){}
+void Stencil::setUTx3Stencil(){}
+void Stencil::setUTx4Stencil(){}
+
+void Stencil::setVTy1Stencil(){}
+void Stencil::setVTy2Stencil(){}
+void Stencil::setVTy3Stencil(){}
+void Stencil::setVTy4Stencil(){}
+
+void Stencil::setTxxStencil(){}
+void Stencil::setTyyStencil(){}
