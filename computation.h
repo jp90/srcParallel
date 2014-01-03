@@ -93,9 +93,14 @@ void setBoundaryG(GridFunction& g, GridFunction& v);
  * @param deltaT time step size
  */
 
-	void computeRighthandSide(GridFunction& rhs, GridFunction& f, GridFunction& g,RealType deltaT);
+void computeRighthandSide(GridFunction& rhs, GridFunction& f, GridFunction& g,RealType deltaT);
 
 	IO SimIO;
+
+void ComputeTemperature();
+void ComputeHeatfunction();
+void setBoundaryTD();
+void setBoundaryTN();
 
 };
 

@@ -301,4 +301,19 @@ void Computation::computeRighthandSide(GridFunction& rhs, GridFunction& f,
 
 }
 
-ComputeTemperature();
+void Computation::ComputeTemperature() {
+
+}
+
+void Computation::ComputeHeatfunction() {
+
+}
+
+void setBoundaryTD(){
+
+
+}
+void setBoundaryTN(){
+
+
+}
