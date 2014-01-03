@@ -32,6 +32,13 @@ struct simparam {
 	RealType vi;
 	RealType pi;
 	int world_rank;
+	RealType Pr;
+	RealType beta;
+	RealType TI;
+	RealType TO;
+	RealType TU;
+	RealType TL;
+	RealType TR;
 };
 
 #endif /* SIMPARAM_H_ */

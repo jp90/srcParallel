@@ -301,3 +301,4 @@ void Computation::computeRighthandSide(GridFunction& rhs, GridFunction& f,
 
 }
 
+ComputeTemperature();
