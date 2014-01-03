@@ -328,6 +328,7 @@ void GridFunction::MultiplyGridFunctions(const MultiIndexType& begin,
 		}
 	}
 }
+
 void GridFunction::Grid_Print() {
 	for (int i = 0; i < griddimension[0]; i++) {
 		for (int j = 0; j < griddimension[1]; j++) {
