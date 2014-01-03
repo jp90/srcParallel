@@ -250,18 +250,18 @@ void Computation::setBoundaryP(GridFunction& p) {
 }
 void Computation::setBoundaryF(GridFunction& f, GridFunction& u) {
 	MultiIndexType begin, end;
-		begin[0] = 0;
-		end[0] = 0;
-		begin[1] = 1;
-		end[1] = f.griddimension[1] - 2;
-		f.SetGridFunction(begin, end, 1.0, u);
+	begin[0] = 0;
+	end[0] = 0;
+	begin[1] = 1;
+	end[1] = f.griddimension[1] - 2;
+	f.SetGridFunction(begin, end, 1.0, u);
 
 // F_iMax,j=u_iMax+1,j
-		begin[0] = f.griddimension[0] - 2;
-		end[0] = f.griddimension[0] - 2;
-		begin[1] = 1;
-		end[1] = f.griddimension[1] - 2;
-		f.SetGridFunction(begin, end, 1.0, u);
+	begin[0] = f.griddimension[0] - 2;
+	end[0] = f.griddimension[0] - 2;
+	begin[1] = 1;
+	end[1] = f.griddimension[1] - 2;
+	f.SetGridFunction(begin, end, 1.0, u);
 }
 void Computation::setBoundaryG(GridFunction& g, GridFunction& v) {
 
@@ -301,7 +301,19 @@ void Computation::computeRighthandSide(GridFunction& rhs, GridFunction& f,
 
 }
 
-void Computation::ComputeTemperature() {
+void Computation::ComputeTemperature(GridFunction& T, GridFunction& ) {
+	GridFunction branch_1(T.griddimension);
+	MultiIndexType begin, end;
+
+	begin[0] = 1;
+	end[0] = T.griddimension[0] - 2;
+	begin[1] = 1;
+	end[1] = T.griddimension[1] - 2;
+	PointType delta;
+	delta[0] = SimIO.para.deltaX;
+	delta[1] = SimIO.para.deltaY;
+	UTx(rhs, T, delta);
+	VTy(branch_1, g, delta);
 
 }
 
@@ -309,11 +321,9 @@ void Computation::ComputeHeatfunction() {
 
 }
 
-void setBoundaryTD(){
-
+void setBoundaryTD() {
 
 }
-void setBoundaryTN(){
-
+void setBoundaryTN() {
 
 }
