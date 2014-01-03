@@ -16,7 +16,7 @@
 class IO {
 public:
 
-	/*! Construktor
+	/*! Constructor
 	 * @param input Path to the file with the simulation parameters.
 	 * @param outout Path to the directory for the vtk files.
 	 */
@@ -44,7 +44,7 @@ public:
 				const PointType & delta, int step);
 
 	void writeVTKSlavefile(const MultiIndexType & griddimension,
-				GridFunctionType  u, GridFunctionType  v, GridFunctionType  p,
+				GridFunctionType  u, GridFunctionType  v, GridFunctionType  p, GridFunctionType t,
 				const PointType & delta, int world_rank, int d, int step);
 
 	simparam para;

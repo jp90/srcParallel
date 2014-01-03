@@ -15,16 +15,25 @@ Computation::Computation(IO& SimIO) :
 }
 
 RealType Computation::computeTimesstep(RealType uMax, RealType vMax) {
-	RealType deltaT, min, c;
+	RealType deltaT, min, c, d;
 	c = SimIO.para.re
 			/ (2.0
 					* (1.0 / (SimIO.para.deltaX * SimIO.para.deltaX)
 							+ 1.0 / (SimIO.para.deltaY * SimIO.para.deltaY)));
-	if ((c < SimIO.para.deltaX / uMax) && (c < SimIO.para.deltaY / vMax))
+	d = SimIO.para.re * SimIO.para.Pr
+			/ (2.0
+					* (1.0 / (SimIO.para.deltaX * SimIO.para.deltaX)
+							+ 1.0 / (SimIO.para.deltaY * SimIO.para.deltaY)));
+
+	if ((c < SimIO.para.deltaX / uMax) && (c < SimIO.para.deltaY / vMax) && (c < d))
 		min = c;
 
+	else if  ((d < SimIO.para.deltaX / uMax) && (d < SimIO.para.deltaY / vMax) && (d < c))
+		min = d;
+
 	else if ((SimIO.para.deltaX / uMax < c)
-			&& (SimIO.para.deltaX / uMax < SimIO.para.deltaY / vMax))
+			&& (SimIO.para.deltaX / uMax < SimIO.para.deltaY / vMax)
+			&& (SimIO.para.deltaX / uMax < d))
 		min = SimIO.para.deltaX / uMax;
 
 	else
@@ -63,8 +72,7 @@ void Computation::computeNewVelocities(GridFunction& u, GridFunction& v,
 ;
 
 void Computation::computeMomentumEquations(GridFunction& f, GridFunction& g,
-		GridFunction& u, GridFunction& v, GridFunction& gx, GridFunction& gy,
-		RealType& deltaT) {
+		GridFunction& u, GridFunction& v, GridFunction& t, RealType& deltaT) {
 	PointType h;
 	h[0] = SimIO.para.deltaX;
 	h[1] = SimIO.para.deltaY;
@@ -93,10 +101,19 @@ void Computation::computeMomentumEquations(GridFunction& f, GridFunction& g,
 	f.AddToGridFunction(begin, end, -1.0, branch_3);
 	// KILL branch 2-4
 
-	//MISSING g_x
-
 	f.ScaleGridFunction(begin, end, deltaT);
 	f.AddToGridFunction(begin, end, 1.0, u);
+
+	// - beta deltaT (tx stencil) gx
+	GridFunction branch_5(u.griddimension);
+
+	Stencil stencil_1(3, h);
+	stencil_1.setTxStencil();
+	stencil_1.ApplyStencilOperator(begin, end, begin, end, t, branch_5);
+
+	branch_5.ScaleGridFunction(begin, end, deltaT * SimIO.para.beta * SimIO.para.gx);
+
+	f.AddToGridFunction(begin, end, -1.0, branch_5);
 
 	//Term G
 	begin[0] = 1;
@@ -118,11 +135,19 @@ void Computation::computeMomentumEquations(GridFunction& f, GridFunction& g,
 
 	g.AddToGridFunction(begin, end, -1.0, branch_7);
 
-	//MISSING g_y term
-
 	g.ScaleGridFunction(begin, end, deltaT);
 	g.AddToGridFunction(begin, end, 1.0, v);
 
+	// - beta deltaT (ty stencil) gy
+	GridFunction branch_9(u.griddimension);
+
+	Stencil stencil_1(3, h);
+	stencil_1.setTyStencil();
+	stencil_1.ApplyStencilOperator(begin, end, begin, end, t, branch_9);
+
+	branch_9.ScaleGridFunction(begin, end, deltaT * SimIO.para.beta * SimIO.para.gx);
+
+	g.AddToGridFunction(begin, end, -1.0, branch_9);
 }
 
 void Computation::setBoundaryU(GridFunction& u) {

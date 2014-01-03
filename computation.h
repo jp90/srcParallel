@@ -48,8 +48,8 @@ public:
 	 * @param deltaT
 	 */
 	void computeMomentumEquations(GridFunction& f, GridFunction& g,
-			GridFunction& u, GridFunction& v, GridFunction& gx,
-			GridFunction& gy, RealType& deltaT);
+			GridFunction& u, GridFunction& v, GridFunction& t,
+			RealType& deltaT);
 	/*! \brief Sets the boundary values for u.
 	 *
 	 * Sets the boundary values for u.
