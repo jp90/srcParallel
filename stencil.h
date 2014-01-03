@@ -79,6 +79,13 @@ public:
 	void setTxxStencil();
 	void setTyyStencil();
 
+	void setUT_2Stencil();
+	void setUT_3Stencil();
+	void setUT_4Stencil();
+
+	void setVT_2Stencil();
+	void setVT_3Stencil();
+	void setVT_4Stencil();
 	StencilType stencil;
 	int stencilwidth;
 	const PointType& h;
