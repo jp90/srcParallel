@@ -46,4 +46,12 @@ void Fx(GridFunction& output, GridFunction& f, const PointType& h);
 
 void Gy(GridFunction& output, GridFunction& g, const PointType& h);
 
+void UTX(GridFunction& output, GridFunction& u, GridFunction& T,
+		const RealType gamma, const PointType& h);
+
+void VTY(GridFunction& output, GridFunction& v, GridFunction& T,
+		const RealType gamma, const PointType& h);
+void TXX(GridFunction& output, GridFunction& T, const PointType& h);
+void TYY(GridFunction& output, GridFunction& T, const PointType& h);
+
 #endif /* DERIVATIVES_H_ */

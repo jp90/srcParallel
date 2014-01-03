@@ -420,3 +420,113 @@ void Gy(GridFunction& output, GridFunction& g, const PointType& h) {
 	stencil_1.ApplyStencilOperator(begin, end, begin, end, g, output);
 
 }
+
+void UTX(GridFunction& output, GridFunction& u, GridFunction& T,
+		const RealType gamma, const PointType& h) {
+	MultiIndexType begin, end;
+
+	Stencil stencil_1(3, h);
+	stencil_1.setUTx_1Stencil();
+	stencil_1.ApplyStencilOperator(begin, end, begin, end, T, output);
+	output.MultiplyGridFunctions(begin, end, u);
+
+	GridFunction branch_2(u.griddimension);
+	GridFunction branch_2u(u.griddimension);
+	Stencil stencil_2(3, h);
+	Stencil stencil_2u(3, h);
+	stencil_2.setUTx_2Stencil();
+	stencil_2u.setUT_2Stencil();
+	stencil_2.ApplyStencilOperator(begin, end, begin, end, T, branch_2);
+	stencil_2u.ApplyStencilOperator(begin, end, begin, end, T, branch_2u);
+
+	branch_2.MultiplyGridFunctions(begin, end, branch_2u);
+	output.AddToGridFunction(begin, end, -1.0, branch_2);
+
+	GridFunction branch_3(u.griddimension);
+	GridFunction branch_3u(u.griddimension);
+	Stencil stencil_3(3, h);
+	Stencil stencil_3u(3, h);
+	stencil_3.setUTx_3Stencil();
+	stencil_3u.setUT_3Stencil();
+	stencil_3.ApplyStencilOperator(begin, end, begin, end, T, branch_3);
+	stencil_3u.ApplyStencilOperator(begin, end, begin, end, T, branch_3u);
+
+	branch_3.MultiplyGridFunctions(begin, end, branch_3u);
+	output.AddToGridFunction(begin, end, gamma, branch_3);
+
+	GridFunction branch_4(u.griddimension);
+	GridFunction branch_4u(u.griddimension);
+	Stencil stencil_4(3, h);
+	Stencil stencil_4u(3, h);
+	stencil_4.setUTx_4Stencil();
+	stencil_4u.setUT_4Stencil();
+	stencil_4.ApplyStencilOperator(begin, end, begin, end, T, branch_4);
+	stencil_4u.ApplyStencilOperator(begin, end, begin, end, T, branch_4u);
+
+	branch_4.MultiplyGridFunctions(begin, end, branch_4u);
+	output.AddToGridFunction(begin, end, -gamma, branch_4);
+}
+
+void VTY(GridFunction& output, GridFunction& v, GridFunction& T,
+		const RealType gamma, const PointType& h) {
+	MultiIndexType begin, end;
+
+	Stencil stencil_1(3, h);
+	stencil_1.setVTy_1Stencil();
+	stencil_1.ApplyStencilOperator(begin, end, begin, end, T, output);
+	output.MultiplyGridFunctions(begin, end, v);
+
+	GridFunction branch_2(v.griddimension);
+	GridFunction branch_2v(v.griddimension);
+	Stencil stencil_2(3, h);
+	Stencil stencil_2v(3, h);
+	stencil_2.setVTy_2Stencil();
+	stencil_2v.setVT_2Stencil();
+	stencil_2.ApplyStencilOperator(begin, end, begin, end, T, branch_2);
+	stencil_2v.ApplyStencilOperator(begin, end, begin, end, T, branch_2v);
+
+	branch_2.MultiplyGridFunctions(begin, end, branch_2v);
+	output.AddToGridFunction(begin, end, -1.0, branch_2);
+
+	GridFunction branch_3(v.griddimension);
+	GridFunction branch_3v(v.griddimension);
+	Stencil stencil_3(3, h);
+	Stencil stencil_3v(3, h);
+	stencil_3.setVTy_3Stencil();
+	stencil_3v.setVT_3Stencil();
+	stencil_3.ApplyStencilOperator(begin, end, begin, end, T, branch_3);
+	stencil_3v.ApplyStencilOperator(begin, end, begin, end, T, branch_3v);
+
+	branch_3.MultiplyGridFunctions(begin, end, branch_3v);
+	output.AddToGridFunction(begin, end, gamma, branch_3);
+
+	GridFunction branch_4(v.griddimension);
+	GridFunction branch_4v(v.griddimension);
+	Stencil stencil_4(3, h);
+	Stencil stencil_4v(3, h);
+	stencil_4.setVTy_4Stencil();
+	stencil_4v.setVT_4Stencil();
+	stencil_4.ApplyStencilOperator(begin, end, begin, end, T, branch_4);
+	stencil_4v.ApplyStencilOperator(begin, end, begin, end, T, branch_4v);
+
+	branch_4.MultiplyGridFunctions(begin, end, branch_4v);
+	output.AddToGridFunction(begin, end, -gamma, branch_4);
+}
+
+void TXX(GridFunction& output, GridFunction& T, const PointType& h) {
+	MultiIndexType begin, end;
+	GridFunction branch_1(T.griddimension);
+	Stencil stencil_1(3, h);
+	stencil_1.setTxxStencil();
+	stencil_1.ApplyStencilOperator(begin, end, begin, end, T, output);
+
+}
+
+void TYY(GridFunction& output, GridFunction& T, const PointType& h) {
+	MultiIndexType begin, end;
+	GridFunction branch_1(T.griddimension);
+	Stencil stencil_1(3, h);
+	stencil_1.setTyyStencil();
+	stencil_1.ApplyStencilOperator(begin, end, begin, end, T, output);
+
+}

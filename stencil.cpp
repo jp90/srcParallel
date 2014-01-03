@@ -329,7 +329,7 @@ void Stencil::setUT_4Stencil(){
 
 void Stencil::setVT_2Stencil(){
 	abs=false;
-	stencil[0][1]=1.0;
+	stencil[1][0]=1.0;
 }
 void Stencil::setVT_3Stencil(){
 	abs=true;
@@ -337,6 +337,6 @@ void Stencil::setVT_3Stencil(){
 }
 void Stencil::setVT_4Stencil(){
 	abs=true;
-    stencil[0][1]=1.0;
+    stencil[1][0]=1.0;
 }
 
