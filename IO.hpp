@@ -44,7 +44,7 @@ public:
 				const PointType & delta, int step);
 
 	void writeVTKSlavefile(const MultiIndexType & griddimension,
-				GridFunctionType  u, GridFunctionType  v, GridFunctionType  p, GridFunctionType t,
+				GridFunctionType  u, GridFunctionType  v, GridFunctionType  p, GridFunctionType t, GridFunctionType h,
 				const PointType & delta, int world_rank, int d, int step);
 
 	simparam para;

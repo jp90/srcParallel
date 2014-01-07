@@ -25,10 +25,12 @@ RealType Computation::computeTimesstep(RealType uMax, RealType vMax) {
 					* (1.0 / (SimIO.para.deltaX * SimIO.para.deltaX)
 							+ 1.0 / (SimIO.para.deltaY * SimIO.para.deltaY)));
 
-	if ((c < SimIO.para.deltaX / uMax) && (c < SimIO.para.deltaY / vMax) && (c < d))
+	if ((c < SimIO.para.deltaX / uMax) && (c < SimIO.para.deltaY / vMax)
+			&& (c < d))
 		min = c;
 
-	else if  ((d < SimIO.para.deltaX / uMax) && (d < SimIO.para.deltaY / vMax) && (d < c))
+	else if ((d < SimIO.para.deltaX / uMax) && (d < SimIO.para.deltaY / vMax)
+			&& (d < c))
 		min = d;
 
 	else if ((SimIO.para.deltaX / uMax < c)
@@ -111,7 +113,8 @@ void Computation::computeMomentumEquations(GridFunction& f, GridFunction& g,
 	stencil_1.setTxStencil();
 	stencil_1.ApplyStencilOperator(begin, end, begin, end, t, branch_5);
 
-	branch_5.ScaleGridFunction(begin, end, deltaT * SimIO.para.beta * SimIO.para.gx);
+	branch_5.ScaleGridFunction(begin, end,
+			deltaT * SimIO.para.beta * SimIO.para.gx);
 
 	f.AddToGridFunction(begin, end, -1.0, branch_5);
 
@@ -141,11 +144,12 @@ void Computation::computeMomentumEquations(GridFunction& f, GridFunction& g,
 	// - beta deltaT (ty stencil) gy
 	GridFunction branch_9(u.griddimension);
 
-	Stencil stencil_1(3, h);
-	stencil_1.setTyStencil();
-	stencil_1.ApplyStencilOperator(begin, end, begin, end, t, branch_9);
+	Stencil stencil_2(3, h);
+	stencil_2.setTyStencil();
+	stencil_2.ApplyStencilOperator(begin, end, begin, end, t, branch_9);
 
-	branch_9.ScaleGridFunction(begin, end, deltaT * SimIO.para.beta * SimIO.para.gx);
+	branch_9.ScaleGridFunction(begin, end,
+			deltaT * SimIO.para.beta * SimIO.para.gy);
 
 	g.AddToGridFunction(begin, end, -1.0, branch_9);
 }
@@ -185,7 +189,8 @@ void Computation::setBoundaryU(GridFunction& u) {
 	end[1] = u.griddimension[1] - 1;
 	Offset[0] = 0;
 	Offset[1] = -1;
-	u.SetGridFunction(begin, end, -1.0, u, Offset, 2.0);
+	u.SetGridFunction(begin, end, -1.0, Offset);
+	//u.SetGridFunction(begin, end, -1.0, u, Offset, 2.0);
 
 }
 void Computation::setBoundaryV(GridFunction& v) {
@@ -275,18 +280,18 @@ void Computation::setBoundaryP(GridFunction& p) {
 }
 void Computation::setBoundaryF(GridFunction& f, GridFunction& u) {
 	MultiIndexType begin, end;
-		begin[0] = 0;
-		end[0] = 0;
-		begin[1] = 1;
-		end[1] = f.griddimension[1] - 2;
-		f.SetGridFunction(begin, end, 1.0, u);
+	begin[0] = 0;
+	end[0] = 0;
+	begin[1] = 1;
+	end[1] = f.griddimension[1] - 2;
+	f.SetGridFunction(begin, end, 1.0, u);
 
 // F_iMax,j=u_iMax+1,j
-		begin[0] = f.griddimension[0] - 2;
-		end[0] = f.griddimension[0] - 2;
-		begin[1] = 1;
-		end[1] = f.griddimension[1] - 2;
-		f.SetGridFunction(begin, end, 1.0, u);
+	begin[0] = f.griddimension[0] - 2;
+	end[0] = f.griddimension[0] - 2;
+	begin[1] = 1;
+	end[1] = f.griddimension[1] - 2;
+	f.SetGridFunction(begin, end, 1.0, u);
 }
 void Computation::setBoundaryG(GridFunction& g, GridFunction& v) {
 
@@ -326,3 +331,137 @@ void Computation::computeRighthandSide(GridFunction& rhs, GridFunction& f,
 
 }
 
+void Computation::ComputeTemperature(GridFunction& T, GridFunction& u,
+		GridFunction& v, RealType deltaT) {
+	GridFunction branch_1(T.griddimension);
+	GridFunction branch_2(T.griddimension);
+	MultiIndexType begin, end;
+//missing w�rmequelle
+	begin[0] = 1;
+	end[0] = T.griddimension[0] - 2;
+	begin[1] = 1;
+	end[1] = T.griddimension[1] - 2;
+	PointType delta;
+	delta[0] = SimIO.para.deltaX;
+	delta[1] = SimIO.para.deltaY;
+
+	TXX(branch_1, T, delta);
+	TYY(branch_2, T, delta);
+	branch_1.AddToGridFunction(begin, end, 1.0, branch_2);
+	branch_1.ScaleGridFunction(begin, end,
+			1.0 / (SimIO.para.Pr * SimIO.para.re));
+
+	GridFunction branch_3(T.griddimension);
+	GridFunction branch_4(T.griddimension);
+	UTX(branch_3, u, T, SimIO.para.gamma, delta);
+	VTY(branch_4, v, T, SimIO.para.gamma, delta);
+	branch_3.AddToGridFunction(begin, end, 1.0, branch_4);
+
+	branch_1.AddToGridFunction(begin, end, -1.0, branch_3);
+	branch_1.ScaleGridFunction(begin, end, deltaT);
+	T.AddToGridFunction(begin, end, 1.0, branch_1);
+}
+
+void Computation::ComputeHeatfunction(GridFunction& h, GridFunction& t, GridFunction& u, RealType deltaT) {
+	for (int i = 0; i <= h.griddimension[0]-2; i++){
+		for (int j = 1; j <= h.griddimension[1]-2; j++){
+			h.getGridFunction()[i][j] = h.getGridFunction()[i][j-1]
+			                + deltaT * (SimIO.para.re * SimIO.para.Pr * u.getGridFunction()[i][j]
+			                  * (t.getGridFunction()[i+1][j] + t.getGridFunction()[i][j])/2.0
+			                  - (t.getGridFunction()[i+1][j] - t.getGridFunction()[i][j])/ SimIO.para.deltaX);
+		}
+	}
+
+}
+
+void Computation::setBoundaryTD(GridFunction& T, RealType (*TO)(RealType),
+		RealType (*TU)(RealType), RealType (*TL)(RealType),
+		RealType (*TR)(RealType)) {
+	MultiIndexType begin, end;
+	if (SimIO.para.world_rank == 0) {
+		// p_0,j = p_1,j
+		begin[0] = 0;
+		end[0] = 0;
+		begin[1] = 1;
+		end[1] = T.griddimension[1] - 2;
+
+		T.SetGridFunction(begin, end, TL, true, SimIO.para.deltaY);
+		T.ScaleGridFunction(begin, end, 2.0);
+		MultiIndexType Offset;
+		Offset[0] = 1;
+		Offset[1] = 0;
+		T.AddToGridFunction(begin, end, -1.0, T, Offset);
+
+	}
+
+	if (SimIO.para.world_rank == 1) {
+		// T_imax+1,j
+		begin[0] = T.griddimension[0] - 1;
+		end[0] = T.griddimension[0] - 1;
+		begin[1] = 1;
+		end[1] = T.griddimension[1] - 2;
+		MultiIndexType Offset;
+		Offset[0] = -1;
+		Offset[1] = 0;
+		T.SetGridFunction(begin, end, TR, true, SimIO.para.deltaY);
+		T.ScaleGridFunction(begin, end, 2.0);
+		T.AddToGridFunction(begin, end, -1.0, T, Offset);
+	}
+/*
+	// T_i,0
+
+	begin[0] = 1;
+	end[0] = T.griddimension[0] - 2;
+	begin[1] = 0;
+	end[1] = 0;
+	MultiIndexType Offset;
+	Offset[0] = 0;
+	Offset[1] = 1;
+	T.SetGridFunction(begin, end, TU, false, SimIO.para.deltaX);
+	T.ScaleGridFunction(begin, end, 2.0);
+	T.AddToGridFunction(begin, end, -1.0, T, Offset);
+
+	// T_i,jmax+1
+
+	begin[0] = 1;
+	end[0] = T.griddimension[0] - 2;
+	begin[1] = T.griddimension[1] - 1;
+	end[1] = T.griddimension[1] - 1;
+	MultiIndexType Offset;
+	Offset[0] = 0;
+	Offset[1] = -1;
+	T.SetGridFunction(begin, end, TO, false, SimIO.para.deltaX);
+	T.ScaleGridFunction(begin, end, 2.0);
+	T.AddToGridFunction(begin, end, -1.0, T, Offset);*/
+
+}
+void Computation::setBoundaryTN(GridFunction& T, RealType (*TO)(RealType),
+		RealType (*TU)(RealType), RealType (*TL)(RealType),
+		RealType (*TR)(RealType)) {
+	MultiIndexType begin, end;
+	// T_i,0
+
+	begin[0] = 1;
+	end[0] = T.griddimension[0] - 2;
+	begin[1] = 0;
+	end[1] = 0;
+	MultiIndexType Offset;
+	Offset[0] = 0;
+	Offset[1] = 1;
+	T.SetGridFunction(begin, end, TU, false, SimIO.para.deltaX);
+	T.ScaleGridFunction(begin, end, SimIO.para.deltaY);
+	T.AddToGridFunction(begin, end, 1.0, T, Offset);
+
+	// T_i,jmax+1
+
+	begin[0] = 1;
+	end[0] = T.griddimension[0] - 2;
+	begin[1] = T.griddimension[1] - 1;
+	end[1] = T.griddimension[1] - 1;
+	//MultiIndexType Offset;
+	Offset[0] = 0;
+	Offset[1] = -1;
+	T.SetGridFunction(begin, end, TO, false, SimIO.para.deltaX);
+	T.ScaleGridFunction(begin, end, SimIO.para.deltaY);
+	T.AddToGridFunction(begin, end, 1.0, T, Offset);
+}
