@@ -87,6 +87,8 @@ int main() {
 	begin[1] = 1;
 	end[1] = SimIO.para.jMax;
 	t.SetGridFunction(begin, end, SimIO.para.TI);
+	//Initialize heat
+	GridFunction h(SimIO.para.iMax + 2, SimIO.para.jMax + 2);
 
 	GridFunction f(u.griddimension);
 	GridFunction g(v.griddimension);
@@ -123,7 +125,7 @@ int main() {
 		SimIO.writeVTKMasterfile(global_grid, u.getGridFunction(),
 				v.getGridFunction(), p.getGridFunction(), delta, n);
 		SimIO.writeVTKSlavefile(global_grid, u.getGridFunction(),
-				v.getGridFunction(), p.getGridFunction(), t.getGridFunction(),
+				v.getGridFunction(), p.getGridFunction(), t.getGridFunction(), h.getGridFunction(),
 				delta, world_rank, n, n);
 
 		// compute timestep size deltaT
@@ -149,6 +151,8 @@ int main() {
 		computer.ComputeTemperature(t, u, v, deltaT);
 		computer.setBoundaryTD(t, TO,TU,TL,TR);
 		computer.setBoundaryTN(t,TO,TU,TL,TR);
+		communication.ExchangeTValues(t);
+		computer.ComputeHeatfunction(h, t, u, deltaT);
 /*
 		if(world_rank==1){sleep(s);}
 		cout << world_rank << ": U" << endl;
@@ -183,11 +187,11 @@ int main() {
 		//if(world_rank==1){(s);}
 		cout << world_rank << ": f" << endl;
 
-		f.Grid_Print();
+		//f.Grid_Print();
 		//if(world_rank==1){sleep(s);}
 		cout << world_rank << ": t" << endl;
 
-		t.Grid_Print();
+		//t.Grid_Print();
 
 		// set right hand side of p equation
 		computer.computeRighthandSide(rhs, f, g, deltaTmin);
@@ -226,7 +230,7 @@ int main() {
 			if (world_rank == 0) {
 				cout << "Current Residuum: ";
 				cout << Residuum << endl;
-				cout << "it= " << it << "n=" << n << endl;
+				cout << "it= " << it << "; n=" << n << endl;
 			}
 			it++;
 		}

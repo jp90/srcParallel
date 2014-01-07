@@ -98,7 +98,7 @@ void computeRighthandSide(GridFunction& rhs, GridFunction& f, GridFunction& g,Re
 	IO SimIO;
 
 void ComputeTemperature(GridFunction& T, GridFunction& u, GridFunction& v, RealType deltaT);
-void ComputeHeatfunction();
+void ComputeHeatfunction(GridFunction& h, GridFunction& t, GridFunction& u, RealType deltaT);
 void setBoundaryTD(GridFunction& T, RealType (*TO)(RealType),
 		RealType (*TU)(RealType), RealType (*TL)(RealType),
 		RealType (*TR)(RealType) );

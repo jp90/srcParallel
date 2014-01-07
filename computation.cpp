@@ -336,7 +336,7 @@ void Computation::ComputeTemperature(GridFunction& T, GridFunction& u,
 	GridFunction branch_1(T.griddimension);
 	GridFunction branch_2(T.griddimension);
 	MultiIndexType begin, end;
-//missing wŠrmequelle
+//missing wï¿½rmequelle
 	begin[0] = 1;
 	end[0] = T.griddimension[0] - 2;
 	begin[1] = 1;
@@ -362,7 +362,15 @@ void Computation::ComputeTemperature(GridFunction& T, GridFunction& u,
 	T.AddToGridFunction(begin, end, 1.0, branch_1);
 }
 
-void Computation::ComputeHeatfunction() {
+void Computation::ComputeHeatfunction(GridFunction& h, GridFunction& t, GridFunction& u, RealType deltaT) {
+	for (int i = 0; i <= h.griddimension[0]-2; i++){
+		for (int j = 1; j <= h.griddimension[1]-2; j++){
+			h.getGridFunction()[i][j] = h.getGridFunction()[i][j-1]
+			                + deltaT * (SimIO.para.re * SimIO.para.Pr * u.getGridFunction()[i][j]
+			                  * (t.getGridFunction()[i+1][j] + t.getGridFunction()[i][j])/2.0
+			                  - (t.getGridFunction()[i+1][j] - t.getGridFunction()[i][j])/ SimIO.para.deltaX);
+		}
+	}
 
 }
 

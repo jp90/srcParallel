@@ -340,6 +340,7 @@ void IO::writeVTKMasterfile(const MultiIndexType & griddimension,
 			<< "\" />" << std::endl << "<PPointData>" << std::endl
 			<< "<PDataArray type=\"Float64\" Name=\"p\"/>" << std::endl
 			<< "<PDataArray type=\"Float64\" Name=\"t\"/>" << std::endl
+			<< "<PDataArray type=\"Float64\" Name=\"h\"/>" << std::endl
 			<< "<DataArray Name=\"field\" NumberOfComponents=\"3\" type=\"Float64\" />"
 			<< std::endl << "</PPointData>" << std::endl
 			<< "</PRectilinearGrid>" << std::endl << "</VTKFile>" << std::endl;
@@ -349,7 +350,7 @@ void IO::writeVTKMasterfile(const MultiIndexType & griddimension,
 
 void IO::writeVTKSlavefile(const MultiIndexType & griddimension,
 		GridFunctionType u, GridFunctionType v, GridFunctionType p,
-		GridFunctionType t, const PointType & delta, int world_rank, int d,
+		GridFunctionType t, GridFunctionType h, const PointType & delta, int world_rank, int d,
 		int step) {
 
 	IndexType iMax = griddimension[0];
@@ -463,6 +464,16 @@ void IO::writeVTKSlavefile(const MultiIndexType & griddimension,
 	}
 
 	os << "</DataArray>" << std::endl
+			<< "<DataArray type=\"Float64\" Name=\"h\" format=\"ascii\">"
+						<< std::endl;
+				for (int i = 0; i < localgriddimension[1] - 1; ++i) {
+					for (int j = 0; j < localgriddimension[0] - 1; ++j) {
+						os << std::scientific << h[j][i] << " ";
+					}
+					os << std::endl;
+				}
+
+				os << "</DataArray>" << std::endl
 			<< "<DataArray Name=\"field\" NumberOfComponents=\"3\" type=\"Float64\" >"
 			<< std::endl;
 	for (int i = 0; i < localgriddimension[1] - 1; ++i) {

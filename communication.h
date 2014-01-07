@@ -15,6 +15,7 @@
 const int COM_P = 1;
 const int COM_U = 2;
 const int COM_V = 4;
+const int COM_T = 8;
 using namespace std;
 
 class Communication {

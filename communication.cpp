@@ -88,11 +88,11 @@ void Communication::ExchangeTValues(GridFunction& t) {
 		package.SetGridFunction(begin, end, 1.0, t, Offset);
 	//	package.Grid_Print();
 
-		int test = MPI_Send(&package.getGridFunction()[0][0],package.griddimension[1],MPI_DOUBLE,1,COM_P,MPI_COMM_WORLD);
+		int test = MPI_Send(&package.getGridFunction()[0][0],package.griddimension[1],MPI_DOUBLE,1,COM_T,MPI_COMM_WORLD);
 		if(test!=MPI_SUCCESS){
 		cout <<"0: MPI: Sending failed!"<<endl;}
 		MPI_Status  status;
-		MPI_Recv(&package.getGridFunction()[0][0],package.griddimension[1],MPI_DOUBLE,1,COM_P,MPI_COMM_WORLD,&status);
+		MPI_Recv(&package.getGridFunction()[0][0],package.griddimension[1],MPI_DOUBLE,1,COM_T,MPI_COMM_WORLD,&status);
 	//	package.Grid_Print();
 
 				begin[0] = t.griddimension[0] - 1;
@@ -115,9 +115,9 @@ void Communication::ExchangeTValues(GridFunction& t) {
 		Offset[1] = 0;
 		package.SetGridFunction(begin, end, 1.0, t, Offset);
 //		package.Grid_Print();
-		MPI_Send(&package.getGridFunction()[0][0],package.griddimension[1],MPI_DOUBLE,0,COM_P,MPI_COMM_WORLD);
+		MPI_Send(&package.getGridFunction()[0][0],package.griddimension[1],MPI_DOUBLE,0,COM_T,MPI_COMM_WORLD);
 		MPI_Status  status;
-		MPI_Recv(&package.getGridFunction()[0][0],package.griddimension[1],MPI_DOUBLE,0,COM_P,MPI_COMM_WORLD,&status);
+		MPI_Recv(&package.getGridFunction()[0][0],package.griddimension[1],MPI_DOUBLE,0,COM_T,MPI_COMM_WORLD,&status);
 	//	package.Grid_Print();
 
 		begin[0] = 0;
