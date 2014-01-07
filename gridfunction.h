@@ -64,6 +64,10 @@ public:
 	void SetGridFunction(const MultiIndexType& begin, const MultiIndexType& end,
 			RealType factor, MultiIndexType& offset);
 
+	void SetGridFunction(const MultiIndexType& begin,
+			const MultiIndexType& end, RealType (*func)(RealType), bool xy,
+			const RealType h);
+
 	/*! \brief Scales entries by a certain value
 	 *
 	 *  Scales all entries in a rectangular domain by a certain value.
@@ -126,7 +130,9 @@ public:
 	void AddToGridFunction(const MultiIndexType& begin,
 			const MultiIndexType& end, RealType factor,
 			GridFunction& sourcegridFunction);
-
+	void AddToGridFunction(const MultiIndexType& begin,
+			const MultiIndexType& end, RealType factor,
+			GridFunction& sourcegridFunction, MultiIndexType& offset);
 	/*! \brief Returns the maximum value
 	 *
 	 *  Returns the maximum value within the given gridfunction.

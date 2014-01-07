@@ -13,31 +13,48 @@
 #include "computation.h"
 #include "solver.h"
 #include <mpi.h>
-//#include <unistd.h>
+
+#include <unistd.h>
 #include "communication.h"
 using namespace std;
 
+RealType const_zero(RealType c){
+	return 0.0;
+}
+RealType const_one(RealType c){
+	return 1.0;
+}
 int main() {
 
-	int s = 0;
+	RealType (*TO)(RealType);
+	RealType (*TU)(RealType);
+	RealType (*TL)(RealType);
+	RealType (*TR)(RealType);
 
-	char input[] = "./inputvals.txt";
-	char output[] = "./inputvals.txt";
+		TO=&const_zero;
+		TU=&const_zero;
+		TL=&const_one;
+		TR=&const_zero;
+
+	int s = 1;
+
+	char input[] = "./srcParallel/inputvals.txt";
+	char output[] = "./srcParallel/inputvals.txt";
 	IO SimIO(input, output);
 
 	IndexType n = 0;
 	RealType time = 0.0;
 
-	MPI_Init(NULL,NULL);
+	MPI_Init(NULL, NULL);
 	int world_rank;
 	MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
 	MultiIndexType global_grid;
-		global_grid[0] = SimIO.para.iMax + 2;
-		global_grid[1] = SimIO.para.jMax + 2;
+	global_grid[0] = SimIO.para.iMax + 2;
+	global_grid[1] = SimIO.para.jMax + 2;
 
 	//PARA:
-	SimIO.para.iMax = SimIO.para.iMax/2;
+	SimIO.para.iMax = SimIO.para.iMax / 2;
 	SimIO.para.world_rank = world_rank;
 
 	//initialize u,v,p
@@ -47,24 +64,24 @@ int main() {
 	end[0] = SimIO.para.iMax - 1;
 	begin[1] = 1;
 	end[1] = SimIO.para.jMax;
-	GridFunction u(SimIO.para.iMax+2, SimIO.para.jMax+2);
+	GridFunction u(SimIO.para.iMax + 2, SimIO.para.jMax + 2);
 	u.SetGridFunction(begin, end, SimIO.para.ui);
-    //Initialize v-velocity
-	GridFunction v(SimIO.para.iMax+2, SimIO.para.jMax+2);
+	//Initialize v-velocity
+	GridFunction v(SimIO.para.iMax + 2, SimIO.para.jMax + 2);
 	begin[0] = 1;
 	end[0] = SimIO.para.iMax;
 	begin[1] = 1;
-	end[1] = SimIO.para.jMax -1;
+	end[1] = SimIO.para.jMax - 1;
 	v.SetGridFunction(begin, end, SimIO.para.vi);
 	//Initialize pressure
-	GridFunction p(SimIO.para.iMax+2, SimIO.para.jMax+2);
+	GridFunction p(SimIO.para.iMax + 2, SimIO.para.jMax + 2);
 	begin[0] = 1;
 	end[0] = SimIO.para.iMax;
 	begin[1] = 1;
 	end[1] = SimIO.para.jMax;
 	p.SetGridFunction(begin, end, SimIO.para.pi);
 	//Initialize temperature
-	GridFunction t(SimIO.para.iMax+2, SimIO.para.jMax+2);
+	GridFunction t(SimIO.para.iMax + 2, SimIO.para.jMax + 2);
 	begin[0] = 1;
 	end[0] = SimIO.para.iMax;
 	begin[1] = 1;
@@ -80,27 +97,34 @@ int main() {
 	Solver solve(SimIO);
 
 	PointType delta;
-    //computer.setBoundaryU(u);
-    //p.Grid_Print();
-	delta[0]=SimIO.para.deltaX;
-	delta[1]=SimIO.para.deltaY;
+	//computer.setBoundaryU(u);
+	//p.Grid_Print();
+	delta[0] = SimIO.para.deltaX;
+	delta[1] = SimIO.para.deltaY;
 	//Start Main Loop
 
+	computer.setBoundaryTD(t, TO,TU,TL,TR);
+	computer.setBoundaryTN(t,TO,TU,TL,TR);
 	computer.setBoundaryV(v);
 //	if(world_rank==0){sleep(s);}
-					cout << world_rank <<": nach boundary" << endl;
-						p.Grid_Print();
+	cout << world_rank << ": nach boundary" << endl;
+	p.Grid_Print();
 //	if(world_rank==1){sleep(s);}
-					cout << world_rank <<": nach boundary" << endl;
-						p.Grid_Print();
+	cout << world_rank << ": nach boundary" << endl;
+	p.Grid_Print();
 
 	Communication communication(world_rank);
 
+	int count = 0;
 
-int count=0;
-	while ((time < SimIO.para.tEnd)){
-		SimIO.writeVTKMasterfile(global_grid,u.getGridFunction(),v.getGridFunction(),p.getGridFunction(),delta,n);
-		SimIO.writeVTKSlavefile(global_grid,u.getGridFunction(),v.getGridFunction(),p.getGridFunction(),delta,world_rank,n,n);
+
+
+	while ((time < SimIO.para.tEnd)) {
+		SimIO.writeVTKMasterfile(global_grid, u.getGridFunction(),
+				v.getGridFunction(), p.getGridFunction(), delta, n);
+		SimIO.writeVTKSlavefile(global_grid, u.getGridFunction(),
+				v.getGridFunction(), p.getGridFunction(), t.getGridFunction(),
+				delta, world_rank, n, n);
 
 		// compute timestep size deltaT
 		RealType uMax = u.MaxValueGridFunction(begin, end);
@@ -109,101 +133,120 @@ int count=0;
 
 		double deltaTmin;
 
-		MPI_Reduce(&deltaT,&deltaTmin,1,MPI_DOUBLE, MPI_MIN, 0, MPI_COMM_WORLD);
-		MPI_Bcast(&deltaTmin,1,MPI_DOUBLE,0,MPI_COMM_WORLD);
-	//	if(world_rank==1){sleep(s);}
-	//		cout << world_rank <<": bevor boundary" << endl;
-	//			p.Grid_Print();
+		MPI_Reduce(&deltaT, &deltaTmin, 1, MPI_DOUBLE, MPI_MIN, 0,
+				MPI_COMM_WORLD);
+		MPI_Bcast(&deltaTmin, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+		//	if(world_rank==1){sleep(s);}
+		//		cout << world_rank <<": bevor boundary" << endl;
+		//			p.Grid_Print();
 		// set boundary values
 		computer.setBoundaryU(u);
 		computer.setBoundaryV(v);
-	//	if(world_rank==1){sleep(s);}
-	//				cout << world_rank <<": nach boundary" << endl;
-	//					p.Grid_Print();
+		//	if(world_rank==1){sleep(s);}
+		//				cout << world_rank <<": nach boundary" << endl;
+		//					p.Grid_Print();
 
-		computer.computeTemperature(...);
-		computer.setBoundaryTD(t);
-		computer.setBoundaryTN(t);
+		computer.ComputeTemperature(t, u, v, deltaT);
+		computer.setBoundaryTD(t, TO,TU,TL,TR);
+		computer.setBoundaryTN(t,TO,TU,TL,TR);
+/*
+		if(world_rank==1){sleep(s);}
+		cout << world_rank << ": U" << endl;
+		u.Grid_Print();
+
+		if(world_rank==1){sleep(s);}
+		cout << world_rank << ": V" << endl;
+		v.Grid_Print();
+
+		if(world_rank==1){sleep(s);}
+		cout << world_rank << ": P" << endl;
+		p.Grid_Print();
+
+		if(world_rank==1){sleep(s);}
+		cout << world_rank << ": T" << endl;
+		t.Grid_Print();
+		*/
+
 
 		// Compute F and G
 		computer.computeMomentumEquations(f, g, u, v, t, deltaTmin);
 
-		computer.setBoundaryF(f,u);
-		computer.setBoundaryG(g,v);
+		computer.setBoundaryF(f, u);
+		computer.setBoundaryG(g, v);
 
-	/*	if(world_rank==1)sleep(s);
-		cout<<"u"<<endl;
-		p.Grid_Print();
+		/*	if(world_rank==1)sleep(s);
+		 cout<<"u"<<endl;
+		 p.Grid_Print();
 
-		cout<<"v"<<endl;
-		p.Grid_Print(); */
+		 cout<<"v"<<endl;
+		 p.Grid_Print(); */
 		//if(world_rank==1){(s);}
-				cout << world_rank <<": f" << endl;
+		cout << world_rank << ": f" << endl;
 
 		f.Grid_Print();
 		//if(world_rank==1){sleep(s);}
-		cout << world_rank <<": g" << endl;
+		cout << world_rank << ": t" << endl;
 
-		g.Grid_Print();
-
+		t.Grid_Print();
 
 		// set right hand side of p equation
-		computer.computeRighthandSide(rhs,f,g,deltaTmin);
-	//	rhs.Grid_Print();
+		computer.computeRighthandSide(rhs, f, g, deltaTmin);
+		//	rhs.Grid_Print();
 		//SOR-SOLVER
-		int it =0;
-		RealType Residuum = SimIO.para.eps+1.0;
+		int it = 0;
+		RealType Residuum = SimIO.para.eps + 1.0;
 		RealType Residuum_local = 0.0;
 		while ((it < SimIO.para.iterMax) && (Residuum > SimIO.para.eps)) {
-          //  cout << "Computing pressure" <<endl;
-            //Set boundary
-            computer.setBoundaryP(p);
-            // SOR Cycle
-            solve.SORCycle_Black(p,rhs);
-           // p.Grid_Print();
-          // 		if(world_rank==1){sleep(s);}
-           // 		cout << world_rank <<": after black" << endl;
-            //		p.Grid_Print();
+			//  cout << "Computing pressure" <<endl;
+			//Set boundary
+			computer.setBoundaryP(p);
+			// SOR Cycle
+			solve.SORCycle_Black(p, rhs);
+			// p.Grid_Print();
+			// 		if(world_rank==1){sleep(s);}
+			// 		cout << world_rank <<": after black" << endl;
+			//		p.Grid_Print();
 
-            communication.ExchangePValues(p);
+			communication.ExchangePValues(p);
 
+			solve.SORCycle_White(p, rhs);
 
-            solve.SORCycle_White(p,rhs);
+			communication.ExchangePValues(p);
+			//	if(world_rank==1){sleep(s);}
+			//           		cout << world_rank <<": after white" << endl;
+			//      		p.Grid_Print();
+			// if(world_rank==0) sleep(s);
+			//p.Grid_Print();
+			//return 0;
+			Residuum_local = solve.computeResidual(p, rhs);
 
-            communication.ExchangePValues(p);
-        //	if(world_rank==1){sleep(s);}
-         //           		cout << world_rank <<": after white" << endl;
-              //      		p.Grid_Print();
-           // if(world_rank==0) sleep(s);
-            //p.Grid_Print();
-            //return 0;
-			Residuum_local = solve.computeResidual(p,rhs);
-
-			MPI_Reduce(&Residuum_local,&Residuum,1,MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-			MPI_Bcast(&Residuum,1,MPI_DOUBLE,0,MPI_COMM_WORLD);
-			if(world_rank==0){
-			cout << "Current Residuum: ";
-			cout << Residuum<<endl;
-			cout << "it= "<<it << "n="<<n<< endl;}
+			MPI_Reduce(&Residuum_local, &Residuum, 1, MPI_DOUBLE, MPI_SUM, 0,
+					MPI_COMM_WORLD);
+			MPI_Bcast(&Residuum, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+			if (world_rank == 0) {
+				cout << "Current Residuum: ";
+				cout << Residuum << endl;
+				cout << "it= " << it << "n=" << n << endl;
+			}
 			it++;
 		}
-		if (Residuum>10.0)
+		if (Residuum > 10.0)
 			return 0;
 
 		// Update velocites u and v
 		computer.computeNewVelocities(u, v, f, g, p, deltaTmin);
-	//	if(world_rank==1){sleep(s);}
-	//	cout << world_rank <<": bevor austausch" << endl;
-	//	p.Grid_Print();
-		communication.ExchangeUVValues(u,v);
+		//	if(world_rank==1){sleep(s);}
+		//	cout << world_rank <<": bevor austausch" << endl;
+		//	p.Grid_Print();
+		communication.ExchangeUVValues(u, v);
 
 //		if(world_rank==1){sleep(s);}
 //		cout << world_rank <<": nach austausch" << endl;
-	//	p.Grid_Print();
-		cout <<"Prozessor " << world_rank <<" finished" <<endl;
+		//	p.Grid_Print();
+		cout << "Prozessor " << world_rank << " finished" << endl;
 
 		n++;
-	//	cout << "t= " << t<< endl;
+		//	cout << "t= " << t<< endl;
 		time += deltaTmin;
 		count++;
 	}

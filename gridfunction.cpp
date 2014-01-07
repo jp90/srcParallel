@@ -261,6 +261,39 @@ void GridFunction::SetGridFunction(const MultiIndexType& begin,
 	}
 }
 
+
+
+void GridFunction::SetGridFunction(const MultiIndexType& begin,
+		const MultiIndexType& end, RealType (*func)(RealType), bool xy,
+		const RealType h) {
+	if (begin[0] < 0) {
+		cout << "Invalid Index";
+	}
+	if (end[0] > griddimension[0]) {
+		cout << "Invalid Index";
+	}
+	if (begin[1] < 0) {
+		cout << "Invalid Index";
+	}
+	if (end[1] > griddimension[1]) {
+		cout << "Invalid Index";
+	}
+	if (xy == false) {
+		for (int i = begin[0]; i <= end[0]; i++) {
+			for (int j = begin[1]; j <= end[1]; j++) {
+				gridfunction[i][j] = func((float(i) - 0.5) * h);
+			}
+		}
+	} else {
+		for (int i = begin[0]; i <= end[0]; i++) {
+			for (int j = begin[1]; j <= end[1]; j++) {
+				gridfunction[i][j] = func((float(j) - 0.5) * h);
+			}
+		}
+	}
+
+}
+
 void GridFunction::AddToGridFunction(const MultiIndexType& begin,
 		const MultiIndexType& end, RealType factor,
 		GridFunction& sourcegridFunction) {
@@ -280,6 +313,54 @@ void GridFunction::AddToGridFunction(const MultiIndexType& begin,
 		for (int j = begin[1]; j <= end[1]; j++) {
 			gridfunction[i][j] += factor
 					* sourcegridFunction.getGridFunction()[i][j];
+		}
+	}
+}
+
+void GridFunction::AddToGridFunction(const MultiIndexType& begin,
+		const MultiIndexType& end, RealType factor,
+		GridFunction& sourcegridFunction, MultiIndexType& offset) {
+	if (begin[0] < 0) {
+		cout << "Invalid Index";
+	}
+	if (end[0] > griddimension[0]) {
+		cout << "Invalid Index";
+	}
+	if (begin[1] < 0) {
+		cout << "Invalid Index";
+	}
+	if (end[1] > griddimension[1]) {
+		cout << "Invalid Index";
+	}
+	if (begin[0] + offset[0] < 0) {
+		cout << "Invalid Index";
+	}
+	if (begin[0] + offset[0] > sourcegridFunction.griddimension[0]) {
+		cout << "Invalid Index";
+	}
+	if (end[0] + offset[0] < 0) {
+		cout << "Invalid Index";
+	}
+	if (end[0] + offset[0] > sourcegridFunction.griddimension[0]) {
+		cout << "Invalid Index";
+	}
+	if (begin[1] + offset[1] < 0) {
+		cout << "Invalid Index";
+	}
+	if (begin[1] + offset[1] > sourcegridFunction.griddimension[1]) {
+		cout << "Invalid Index";
+	}
+	if (end[1] + offset[1] < 0) {
+		cout << "Invalid Index";
+	}
+	if (end[1] + offset[1] > sourcegridFunction.griddimension[1]) {
+		cout << "Invalid Index";
+	}
+	for (int i = begin[0]; i <= end[0]; i++) {
+		for (int j = begin[1]; j <= end[1]; j++) {
+			gridfunction[i][j] += factor
+					* sourcegridFunction.getGridFunction()[i + offset[0]][j
+							+ offset[1]];
 		}
 	}
 }

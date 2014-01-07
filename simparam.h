@@ -25,6 +25,7 @@ struct simparam {
 	RealType eps;
 	RealType omg;
 	RealType alpha;
+	RealType gamma;
 	RealType re;
 	RealType gx;
 	RealType gy;

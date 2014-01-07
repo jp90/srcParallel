@@ -424,6 +424,10 @@ void Gy(GridFunction& output, GridFunction& g, const PointType& h) {
 void UTX(GridFunction& output, GridFunction& u, GridFunction& T,
 		const RealType gamma, const PointType& h) {
 	MultiIndexType begin, end;
+	begin[0] = 1;
+	end[0] = T.griddimension[0] - 2;
+	begin[1] = 1;
+	end[1] = T.griddimension[1] - 2;
 
 	Stencil stencil_1(3, h);
 	stencil_1.setUTx_1Stencil();
@@ -437,7 +441,7 @@ void UTX(GridFunction& output, GridFunction& u, GridFunction& T,
 	stencil_2.setUTx_2Stencil();
 	stencil_2u.setUT_2Stencil();
 	stencil_2.ApplyStencilOperator(begin, end, begin, end, T, branch_2);
-	stencil_2u.ApplyStencilOperator(begin, end, begin, end, T, branch_2u);
+	stencil_2u.ApplyStencilOperator(begin, end, begin, end, u, branch_2u);
 
 	branch_2.MultiplyGridFunctions(begin, end, branch_2u);
 	output.AddToGridFunction(begin, end, -1.0, branch_2);
@@ -449,7 +453,7 @@ void UTX(GridFunction& output, GridFunction& u, GridFunction& T,
 	stencil_3.setUTx_3Stencil();
 	stencil_3u.setUT_3Stencil();
 	stencil_3.ApplyStencilOperator(begin, end, begin, end, T, branch_3);
-	stencil_3u.ApplyStencilOperator(begin, end, begin, end, T, branch_3u);
+	stencil_3u.ApplyStencilOperator(begin, end, begin, end, u, branch_3u);
 
 	branch_3.MultiplyGridFunctions(begin, end, branch_3u);
 	output.AddToGridFunction(begin, end, gamma, branch_3);
@@ -461,7 +465,7 @@ void UTX(GridFunction& output, GridFunction& u, GridFunction& T,
 	stencil_4.setUTx_4Stencil();
 	stencil_4u.setUT_4Stencil();
 	stencil_4.ApplyStencilOperator(begin, end, begin, end, T, branch_4);
-	stencil_4u.ApplyStencilOperator(begin, end, begin, end, T, branch_4u);
+	stencil_4u.ApplyStencilOperator(begin, end, begin, end, u, branch_4u);
 
 	branch_4.MultiplyGridFunctions(begin, end, branch_4u);
 	output.AddToGridFunction(begin, end, -gamma, branch_4);
@@ -470,6 +474,10 @@ void UTX(GridFunction& output, GridFunction& u, GridFunction& T,
 void VTY(GridFunction& output, GridFunction& v, GridFunction& T,
 		const RealType gamma, const PointType& h) {
 	MultiIndexType begin, end;
+	begin[0] = 1;
+	end[0] = T.griddimension[0] - 2;
+	begin[1] = 1;
+	end[1] = T.griddimension[1] - 2;
 
 	Stencil stencil_1(3, h);
 	stencil_1.setVTy_1Stencil();
@@ -483,7 +491,7 @@ void VTY(GridFunction& output, GridFunction& v, GridFunction& T,
 	stencil_2.setVTy_2Stencil();
 	stencil_2v.setVT_2Stencil();
 	stencil_2.ApplyStencilOperator(begin, end, begin, end, T, branch_2);
-	stencil_2v.ApplyStencilOperator(begin, end, begin, end, T, branch_2v);
+	stencil_2v.ApplyStencilOperator(begin, end, begin, end, v, branch_2v);
 
 	branch_2.MultiplyGridFunctions(begin, end, branch_2v);
 	output.AddToGridFunction(begin, end, -1.0, branch_2);
@@ -495,7 +503,7 @@ void VTY(GridFunction& output, GridFunction& v, GridFunction& T,
 	stencil_3.setVTy_3Stencil();
 	stencil_3v.setVT_3Stencil();
 	stencil_3.ApplyStencilOperator(begin, end, begin, end, T, branch_3);
-	stencil_3v.ApplyStencilOperator(begin, end, begin, end, T, branch_3v);
+	stencil_3v.ApplyStencilOperator(begin, end, begin, end, v, branch_3v);
 
 	branch_3.MultiplyGridFunctions(begin, end, branch_3v);
 	output.AddToGridFunction(begin, end, gamma, branch_3);
@@ -507,7 +515,7 @@ void VTY(GridFunction& output, GridFunction& v, GridFunction& T,
 	stencil_4.setVTy_4Stencil();
 	stencil_4v.setVT_4Stencil();
 	stencil_4.ApplyStencilOperator(begin, end, begin, end, T, branch_4);
-	stencil_4v.ApplyStencilOperator(begin, end, begin, end, T, branch_4v);
+	stencil_4v.ApplyStencilOperator(begin, end, begin, end, v, branch_4v);
 
 	branch_4.MultiplyGridFunctions(begin, end, branch_4v);
 	output.AddToGridFunction(begin, end, -gamma, branch_4);
@@ -515,6 +523,11 @@ void VTY(GridFunction& output, GridFunction& v, GridFunction& T,
 
 void TXX(GridFunction& output, GridFunction& T, const PointType& h) {
 	MultiIndexType begin, end;
+	begin[0] = 1;
+	end[0] = T.griddimension[0] - 2;
+	begin[1] = 1;
+	end[1] = T.griddimension[1] - 2;
+
 	GridFunction branch_1(T.griddimension);
 	Stencil stencil_1(3, h);
 	stencil_1.setTxxStencil();
@@ -524,6 +537,11 @@ void TXX(GridFunction& output, GridFunction& T, const PointType& h) {
 
 void TYY(GridFunction& output, GridFunction& T, const PointType& h) {
 	MultiIndexType begin, end;
+	begin[0] = 1;
+	end[0] = T.griddimension[0] - 2;
+	begin[1] = 1;
+	end[1] = T.griddimension[1] - 2;
+
 	GridFunction branch_1(T.griddimension);
 	Stencil stencil_1(3, h);
 	stencil_1.setTyyStencil();

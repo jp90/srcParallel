@@ -27,6 +27,7 @@ public:
 	 * @param p pressure
 	 */
 	void ExchangePValues(GridFunction& p);
+	void ExchangeTValues(GridFunction& t);
 	/*! \brief Exchanges p values
 	 *
 	 * Exchanges the velocity values u and v between the domain's borders
