@@ -48,6 +48,8 @@ public:
 				const PointType & delta, int world_rank, int d, int step);
 
 	simparam para;
+	unsigned int **geometry_field;
+	void readGeometry(char *filename);
 
 private:
 

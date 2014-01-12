@@ -40,6 +40,11 @@ struct simparam {
 	RealType TU;
 	RealType TL;
 	RealType TR;
+	int WL;
+	int WR;
+	int WO;
+	int WU;
+	int nfc;
 };
 
 #endif /* SIMPARAM_H_ */

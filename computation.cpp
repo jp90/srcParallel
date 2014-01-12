@@ -155,6 +155,81 @@ void Computation::computeMomentumEquations(GridFunction& f, GridFunction& g,
 }
 
 void Computation::setBoundaryU(GridFunction& u) {
+	for (int i = 1; i < u.griddimension[0] - 2; i++) {
+		for (int j = 1; j < u.griddimension[1] - 2; j++) {
+			switch (SimIO.geometry_field[i][j]) {
+			//hindernis, Ÿberall hindernis
+			case 0:
+				u.getGridFunction()[i][j] = 0.0;
+				break;
+				//hindernis, N Fluid
+			case 1:
+				u.getGridFunction()[i - 1][j] = -u.getGridFunction()[i - 1][j
+						+ 1];
+				u.getGridFunction()[i][j] = -u.getGridFunction()[i][j + 1];
+				break;
+				//hindernis, S Fluid
+			case 2:
+				u.getGridFunction()[i - 1][j] = -u.getGridFunction()[i - 1][j
+						- 1];
+				u.getGridFunction()[i][j] = -u.getGridFunction()[i][j - 1];
+				break;
+			case 3:
+				cout << "Forbidden geometry, sucker!";
+				break;
+				//hindernis, W Fluid
+			case 4:
+				u.getGridFunction()[i - 1][j] = 0.0;
+				break;
+				//hindernis, NW Fluid
+			case 5:
+				u.getGridFunction()[i][j] = -u.getGridFunction()[i][j + 1];
+				u.getGridFunction()[i - 1][j] = 0.0;
+				break;
+				//hindernis, SW Fluid
+			case 6:
+				u.getGridFunction()[i][j] = -u.getGridFunction()[i][j - 1];
+				u.getGridFunction()[i - 1][j] = 0.0;
+				break;
+			case 7:
+				cout << "Forbidden geometry, sucker!";
+				break;
+				//hindernis, O Fluid
+			case 8:
+				u.getGridFunction()[i - 1][j] = 0.0;
+				break;
+				//hindernis, NO Fluid
+			case 9:
+				u.getGridFunction()[i][j] = 0.0;
+				u.getGridFunction()[i - 1][j] = -u.getGridFunction()[i - 1][j
+						+ 1];
+				break;
+				//hindernis, SO Fluid
+			case 10:
+				u.getGridFunction()[i][j] = 0.0;
+				u.getGridFunction()[i - 1][j] = -u.getGridFunction()[i - 1][j
+						- 1];
+				break;
+
+			case 11:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 12:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 13:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 14:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 15:
+				cout << "Forbidden geometry, sucker!";
+				break;
+
+			}
+		}
+	}
 	MultiIndexType begin, end;
 	if (SimIO.para.world_rank == 0) {
 		// u_0,j = 0
@@ -162,7 +237,24 @@ void Computation::setBoundaryU(GridFunction& u) {
 		end[0] = 0;
 		begin[1] = 1;
 		end[1] = u.griddimension[1] - 2;
-		u.SetGridFunction(begin, end, 0.0);
+
+		if (SimIO.para.WL == 1) {
+			u.SetGridFunction(begin, end, 0.0);
+		} else if (SimIO.para.WL == 2) {
+			u.SetGridFunction(begin, end, 0.0);
+		} else if (SimIO.para.WL == 3) {
+			MultiIndexType Offset;
+			Offset[0] = 1;
+			Offset[1] = 0;
+			u.SetGridFunction(begin, end, 1.0, Offset);
+		} else if (SimIO.para.WL == 4) {
+			MultiIndexType Offset;
+			Offset[0] = 1;
+			Offset[1] = 0;
+			u.SetGridFunction(begin, end, -1.0, u, Offset, 2.0);
+			//u.SetGridFunction(begin,end,1.0);
+		}
+
 	}
 	if (SimIO.para.world_rank == 1) {
 		//u_iMax,j = 0
@@ -170,55 +262,205 @@ void Computation::setBoundaryU(GridFunction& u) {
 		end[0] = u.griddimension[0] - 2;
 		begin[1] = 1;
 		end[1] = u.griddimension[1] - 2;
-		u.SetGridFunction(begin, end, 0.0);
+		if (SimIO.para.WR == 1) {
+			u.SetGridFunction(begin, end, 0.0);
+		} else if (SimIO.para.WR == 2) {
+			u.SetGridFunction(begin, end, 0.0);
+
+		} else if (SimIO.para.WR == 3) {
+			MultiIndexType Offset;
+			Offset[0] = -1;
+			Offset[1] = 0;
+			u.SetGridFunction(begin, end, 1.0, Offset);
+		}
+
 	}
 	// u_i,0
 	begin[0] = 1;
 	end[0] = u.griddimension[0] - 2;
 	begin[1] = 0;
 	end[1] = 0;
-	MultiIndexType Offset;
-	Offset[0] = 0;
-	Offset[1] = 1;
-	u.SetGridFunction(begin, end, -1.0, Offset);
-
+	if (SimIO.para.WU == 1) {
+		MultiIndexType Offset;
+		Offset[0] = 0;
+		Offset[1] = 1;
+		u.SetGridFunction(begin, end, -1.0, Offset);
+	} else if (SimIO.para.WU == 2) {
+		MultiIndexType Offset;
+		Offset[0] = 0;
+		Offset[1] = 1;
+		u.SetGridFunction(begin, end, 1.0, Offset);
+	} else if (SimIO.para.WU == 3) {
+		MultiIndexType Offset;
+		Offset[0] = 0;
+		Offset[1] = 1;
+		u.SetGridFunction(begin, end, 1.0, Offset);
+	}
 	// u_i,jMax+1
 	begin[0] = 1;
 	end[0] = u.griddimension[0] - 2;
 	begin[1] = u.griddimension[1] - 1;
 	end[1] = u.griddimension[1] - 1;
-	Offset[0] = 0;
-	Offset[1] = -1;
-	u.SetGridFunction(begin, end, -1.0, Offset);
-	//u.SetGridFunction(begin, end, -1.0, u, Offset, 2.0);
 
+	if (SimIO.para.WO == 1) {
+		MultiIndexType Offset;
+		Offset[0] = 0;
+		Offset[1] = -1;
+		u.SetGridFunction(begin, end, -1.0, Offset);
+		//u.SetGridFunction(begin, end, -1.0, u, Offset, 2.0);
+	} else if (SimIO.para.WO == 2) {
+		MultiIndexType Offset;
+		Offset[0] = 0;
+		Offset[1] = -1;
+		u.SetGridFunction(begin, end, 1.0, Offset);
+	} else if (SimIO.para.WO == 3) {
+		MultiIndexType Offset;
+		Offset[0] = 0;
+		Offset[1] = -1;
+		u.SetGridFunction(begin, end, 1.0, Offset);
+	}
 }
 void Computation::setBoundaryV(GridFunction& v) {
 	MultiIndexType begin, end;
+	for (int i = 1; i < v.griddimension[0] - 2; i++) {
+		for (int j = 1; j < v.griddimension[1] - 2; j++) {
+			switch (SimIO.geometry_field[i][j]) {
+			//hindernis, Ÿberall hindernis
+			case 0:
+				v.getGridFunction()[i][j] = 0.0;
+				break;
+				//hindernis, N Fluid
+			case 1:
+				v.getGridFunction()[i][j] = 0.0;
+				break;
+				//hindernis, S Fluid
+			case 2:
+				v.getGridFunction()[i][j - 1] = 0.0;
+				break;
+			case 3:
+				cout << "Forbidden geometry, sucker!";
+				break;
+				//hindernis, W Fluid
+			case 4:
+				v.getGridFunction()[i][j - 1] = -v.getGridFunction()[i - 1][j
+						- 1];
+				v.getGridFunction()[i][j] = -v.getGridFunction()[i - 1][j];
+				break;
+				//hindernis, NW Fluid
+			case 5:
+				v.getGridFunction()[i][j] = 0.0;
+				v.getGridFunction()[i][j - 1] = -v.getGridFunction()[i - 1][j
+						- 1];
 
+				break;
+				//hindernis, SW Fluid
+			case 6:
+				v.getGridFunction()[i][j] = -v.getGridFunction()[i - 1][j];
+				v.getGridFunction()[i][j - 1] = 0.0;
+
+				break;
+			case 7:
+				cout << "Forbidden geometry, sucker!";
+				break;
+				//hindernis, O Fluid
+			case 8:
+				v.getGridFunction()[i][j - 1] = -v.getGridFunction()[i + 1][j
+						- 1];
+				v.getGridFunction()[i][j] = -v.getGridFunction()[i + 1][j];
+
+				break;
+				//hindernis, NO Fluid
+			case 9:
+				v.getGridFunction()[i][j] = 0;
+				v.getGridFunction()[i][j - 1] = -v.getGridFunction()[i + 1][j
+						- 1];
+
+				break;
+				//hindernis, SO Fluid
+			case 10:
+				v.getGridFunction()[i][j] = -v.getGridFunction()[i + 1][j];
+				v.getGridFunction()[i][j - 1] = 0.0;
+
+				break;
+
+			case 11:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 12:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 13:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 14:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 15:
+				cout << "Forbidden geometry, sucker!";
+				break;
+
+			}
+		}
+	}
 	// v_i,0 = 0
 	begin[0] = 1;
 	end[0] = v.griddimension[0] - 2;
 	begin[1] = 0;
 	end[1] = 0;
-	v.SetGridFunction(begin, end, 0.0);
+	if (SimIO.para.WU == 1) {
+		v.SetGridFunction(begin, end, 0.0);
+	} else if (SimIO.para.WU == 2) {
+		v.SetGridFunction(begin, end, 0.0);
+	} else if (SimIO.para.WU == 3) {
+		MultiIndexType Offset;
+		Offset[0] = 0;
+		Offset[1] = 1;
+		v.SetGridFunction(begin, end, 1.0, Offset);
+	}
 
 	// v_i,jMax =0
 	begin[0] = 1;
 	end[0] = v.griddimension[0] - 2;
 	begin[1] = v.griddimension[1] - 2;
 	end[1] = v.griddimension[1] - 2;
-	v.SetGridFunction(begin, end, 0.0);
+	if (SimIO.para.WO == 1) {
+		v.SetGridFunction(begin, end, 0.0);
+	} else if (SimIO.para.WO == 2) {
+		v.SetGridFunction(begin, end, 0.0);
+	} else if (SimIO.para.WO == 3) {
+		MultiIndexType Offset;
+		Offset[0] = 0;
+		Offset[1] = -1;
+		v.SetGridFunction(begin, end, 1.0, Offset);
+	}
+
 	if (SimIO.para.world_rank == 0) {
 		// v_0,j = -v_1,j
 		begin[0] = 0;
 		end[0] = 0;
 		begin[1] = 1;
 		end[1] = v.griddimension[1] - 2;
-		MultiIndexType Offset;
-		Offset[0] = 1;
-		Offset[1] = 0;
-		v.SetGridFunction(begin, end, -1.0, Offset);
+		if (SimIO.para.WL == 1) {
+			MultiIndexType Offset;
+			Offset[0] = 1;
+			Offset[1] = 0;
+			v.SetGridFunction(begin, end, -1.0, Offset);
+		} else if (SimIO.para.WL == 2) {
+			MultiIndexType Offset;
+			Offset[0] = 1;
+			Offset[1] = 0;
+			v.SetGridFunction(begin, end, 1.0, Offset);
+		} else if (SimIO.para.WL == 3) {
+			MultiIndexType Offset;
+			Offset[0] = 1;
+			Offset[1] = 0;
+			v.SetGridFunction(begin, end, -1.0, Offset);
+		} else if (SimIO.para.WL == 4) {
+			MultiIndexType Offset;
+			Offset[0] = 1;
+			Offset[1] = 0;
+			v.SetGridFunction(begin, end, 0.0);
+		}
 	}
 	if (SimIO.para.world_rank == 1) {
 		// v_iMax+1,j = -v_iMax,j
@@ -226,15 +468,115 @@ void Computation::setBoundaryV(GridFunction& v) {
 		end[0] = v.griddimension[0] - 1;
 		begin[1] = 1;
 		end[1] = v.griddimension[1] - 2;
-		MultiIndexType Offset;
-		Offset[0] = -1;
-		Offset[1] = 0;
-		v.SetGridFunction(begin, end, -1.0, Offset);
+		if (SimIO.para.WR == 1) {
+			MultiIndexType Offset;
+			Offset[0] = -1;
+			Offset[1] = 0;
+			v.SetGridFunction(begin, end, -1.0, Offset);
+		} else if (SimIO.para.WR == 2) {
+			MultiIndexType Offset;
+			Offset[0] = -1;
+			Offset[1] = 0;
+			v.SetGridFunction(begin, end, 1.0, Offset);
+		} else if (SimIO.para.WR == 3) {
+			MultiIndexType Offset;
+			Offset[0] = -1;
+			Offset[1] = 0;
+			v.SetGridFunction(begin, end, 1.0, Offset);
+		}
 	}
 }
 void Computation::setBoundaryP(GridFunction& p) {
 	MultiIndexType begin, end;
+	for (int i = 1; i < p.griddimension[0] - 2; i++) {
+		for (int j = 1; j < p.griddimension[1] - 2; j++) {
+			switch (SimIO.geometry_field[i][j]) {
+			//hindernis, Ÿberall hindernis
+			case 0:
+				p.getGridFunction()[i][j] = 0.0;
+				break;
+				//hindernis, N Fluid
+			case 1:
+				p.getGridFunction()[i][j] = p.getGridFunction()[i][j + 1];
+				break;
+				//hindernis, S Fluid
+			case 2:
+				p.getGridFunction()[i][j] = p.getGridFunction()[i][j - 1];
+				break;
+			case 3:
+				cout << "Forbidden geometry, sucker!";
+				break;
+				//hindernis, W Fluid
+			case 4:
+				p.getGridFunction()[i][j] = p.getGridFunction()[i - 1][j];
+				break;
+				//hindernis, NW Fluid
+			case 5:
+				p.getGridFunction()[i][j] = 1.0
+						/ (SimIO.para.deltaX * SimIO.para.deltaX
+								+ SimIO.para.deltaY * SimIO.para.deltaY)
+						* (SimIO.para.deltaX * SimIO.para.deltaX
+								* p.getGridFunction()[i][j + 1]
+								+ SimIO.para.deltaY * SimIO.para.deltaY
+										* p.getGridFunction()[i - 1][j]);
+				break;
+				//hindernis, SW Fluid
+			case 6:
+				p.getGridFunction()[i][j] = 1.0
+						/ (SimIO.para.deltaX * SimIO.para.deltaX
+								+ SimIO.para.deltaY * SimIO.para.deltaY)
+						* (SimIO.para.deltaX * SimIO.para.deltaX
+								* p.getGridFunction()[i][j - 1]
+								+ SimIO.para.deltaY * SimIO.para.deltaY
+										* p.getGridFunction()[i - 1][j]);
+				break;
+			case 7:
+				cout << "Forbidden geometry, sucker!";
+				break;
+				//hindernis, O Fluid
+			case 8:
+				p.getGridFunction()[i][j] = p.getGridFunction()[i + 1][j];
+				break;
+				//hindernis, NO Fluid
+			case 9:
+				p.getGridFunction()[i][j] = 1.0
+						/ (SimIO.para.deltaX * SimIO.para.deltaX
+								+ SimIO.para.deltaY * SimIO.para.deltaY)
+						* (SimIO.para.deltaX * SimIO.para.deltaX
+								* p.getGridFunction()[i][j + 1]
+								+ SimIO.para.deltaY * SimIO.para.deltaY
+										* p.getGridFunction()[i + 1][j]);
+				break;
+				//hindernis, SO Fluid
+			case 10:
+				p.getGridFunction()[i][j] = 1.0
+						/ (SimIO.para.deltaX * SimIO.para.deltaX
+								+ SimIO.para.deltaY * SimIO.para.deltaY)
+						* (SimIO.para.deltaX * SimIO.para.deltaX
+								* p.getGridFunction()[i][j - 1]
+								+ SimIO.para.deltaY * SimIO.para.deltaY
+										* p.getGridFunction()[i + 1][j]);
+				break;
 
+			case 11:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 12:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 13:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 14:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 15:
+				cout << "Forbidden geometry, sucker!";
+				break;
+
+			}
+		}
+	}
 	if (SimIO.para.world_rank == 0) {
 		// p_0,j = p_1,j
 		begin[0] = 0;
@@ -279,6 +621,63 @@ void Computation::setBoundaryP(GridFunction& p) {
 
 }
 void Computation::setBoundaryF(GridFunction& f, GridFunction& u) {
+	for (int i = 1; i < f.griddimension[0] - 2; i++) {
+		for (int j = 1; j < f.griddimension[1] - 2; j++) {
+			switch (SimIO.geometry_field[i][j]) {
+			//hindernis, Ÿberall hindernis
+			case 0:
+				f.getGridFunction()[i][j] = 0.0;
+				break;
+				//hindernis, N Fluid
+
+			case 4:
+				f.getGridFunction()[i - 1][j] = u.getGridFunction()[i - 1][j];
+				break;
+				//hindernis, NW Fluid
+			case 5:
+				f.getGridFunction()[i - 1][j] = u.getGridFunction()[i - 1][j];
+
+				break;
+				//hindernis, SW Fluid
+			case 6:
+				f.getGridFunction()[i - 1][j] = u.getGridFunction()[i - 1][j];
+
+				break;
+				//hindernis, O Fluid
+			case 8:
+				f.getGridFunction()[i][j] = u.getGridFunction()[i][j];
+
+				break;
+				//hindernis, NO Fluid
+			case 9:
+
+				f.getGridFunction()[i][j] = u.getGridFunction()[i][j];
+
+				break;
+				//hindernis, SO Fluid
+			case 10:
+				f.getGridFunction()[i][j] = u.getGridFunction()[i][j];
+				break;
+
+			case 11:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 12:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 13:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 14:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 15:
+				cout << "Forbidden geometry, sucker!";
+				break;
+
+			}
+		}
+	}
 	MultiIndexType begin, end;
 	begin[0] = 0;
 	end[0] = 0;
@@ -294,7 +693,63 @@ void Computation::setBoundaryF(GridFunction& f, GridFunction& u) {
 	f.SetGridFunction(begin, end, 1.0, u);
 }
 void Computation::setBoundaryG(GridFunction& g, GridFunction& v) {
+	for (int i = 1; i < g.griddimension[0] - 2; i++) {
+		for (int j = 1; j < g.griddimension[1] - 2; j++) {
+			switch (SimIO.geometry_field[i][j]) {
+			//hindernis, Ÿberall hindernis
+			case 0:
+				g.getGridFunction()[i][j] = 0.0;
+				break;
+				//hindernis, N Fluid
 
+			case 1:
+				g.getGridFunction()[i][j] = v.getGridFunction()[i][j];
+				break;
+				//hindernis, NW Fluid
+			case 2:
+				g.getGridFunction()[i][j - 1] = v.getGridFunction()[i][j - 1];
+
+				break;
+				//hindernis, SW Fluid
+			case 5:
+				g.getGridFunction()[i][j] = v.getGridFunction()[i][j];
+
+				break;
+				//hindernis, O Fluid
+			case 6:
+				g.getGridFunction()[i][j - 1] = v.getGridFunction()[i][j - 1];
+
+				break;
+				//hindernis, NO Fluid
+			case 9:
+
+				g.getGridFunction()[i][j] = v.getGridFunction()[i][j];
+
+				break;
+				//hindernis, SO Fluid
+			case 10:
+				g.getGridFunction()[i][j - 1] = v.getGridFunction()[i][j - 1];
+				break;
+
+			case 11:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 12:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 13:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 14:
+				cout << "Forbidden geometry, sucker!";
+				break;
+			case 15:
+				cout << "Forbidden geometry, sucker!";
+				break;
+
+			}
+		}
+	}
 	MultiIndexType begin, end;
 	begin[0] = 1;
 	end[0] = g.griddimension[0] - 2;
@@ -362,13 +817,19 @@ void Computation::ComputeTemperature(GridFunction& T, GridFunction& u,
 	T.AddToGridFunction(begin, end, 1.0, branch_1);
 }
 
-void Computation::ComputeHeatfunction(GridFunction& h, GridFunction& t, GridFunction& u, RealType deltaT) {
-	for (int i = 0; i <= h.griddimension[0]-2; i++){
-		for (int j = 1; j <= h.griddimension[1]-2; j++){
-			h.getGridFunction()[i][j] = h.getGridFunction()[i][j-1]
-			                + deltaT * (SimIO.para.re * SimIO.para.Pr * u.getGridFunction()[i][j]
-			                  * (t.getGridFunction()[i+1][j] + t.getGridFunction()[i][j])/2.0
-			                  - (t.getGridFunction()[i+1][j] - t.getGridFunction()[i][j])/ SimIO.para.deltaX);
+void Computation::ComputeHeatfunction(GridFunction& h, GridFunction& t,
+		GridFunction& u, RealType deltaT) {
+	for (int i = 0; i <= h.griddimension[0] - 2; i++) {
+		for (int j = 1; j <= h.griddimension[1] - 2; j++) {
+			h.getGridFunction()[i][j] = h.getGridFunction()[i][j - 1]
+					+ deltaT
+							* (SimIO.para.re * SimIO.para.Pr
+									* u.getGridFunction()[i][j]
+									* (t.getGridFunction()[i + 1][j]
+											+ t.getGridFunction()[i][j]) / 2.0
+									- (t.getGridFunction()[i + 1][j]
+											- t.getGridFunction()[i][j])
+											/ SimIO.para.deltaX);
 		}
 	}
 
@@ -407,32 +868,32 @@ void Computation::setBoundaryTD(GridFunction& T, RealType (*TO)(RealType),
 		T.ScaleGridFunction(begin, end, 2.0);
 		T.AddToGridFunction(begin, end, -1.0, T, Offset);
 	}
-/*
-	// T_i,0
+	/*
+	 // T_i,0
 
-	begin[0] = 1;
-	end[0] = T.griddimension[0] - 2;
-	begin[1] = 0;
-	end[1] = 0;
-	MultiIndexType Offset;
-	Offset[0] = 0;
-	Offset[1] = 1;
-	T.SetGridFunction(begin, end, TU, false, SimIO.para.deltaX);
-	T.ScaleGridFunction(begin, end, 2.0);
-	T.AddToGridFunction(begin, end, -1.0, T, Offset);
+	 begin[0] = 1;
+	 end[0] = T.griddimension[0] - 2;
+	 begin[1] = 0;
+	 end[1] = 0;
+	 MultiIndexType Offset;
+	 Offset[0] = 0;
+	 Offset[1] = 1;
+	 T.SetGridFunction(begin, end, TU, false, SimIO.para.deltaX);
+	 T.ScaleGridFunction(begin, end, 2.0);
+	 T.AddToGridFunction(begin, end, -1.0, T, Offset);
 
-	// T_i,jmax+1
+	 // T_i,jmax+1
 
-	begin[0] = 1;
-	end[0] = T.griddimension[0] - 2;
-	begin[1] = T.griddimension[1] - 1;
-	end[1] = T.griddimension[1] - 1;
-	MultiIndexType Offset;
-	Offset[0] = 0;
-	Offset[1] = -1;
-	T.SetGridFunction(begin, end, TO, false, SimIO.para.deltaX);
-	T.ScaleGridFunction(begin, end, 2.0);
-	T.AddToGridFunction(begin, end, -1.0, T, Offset);*/
+	 begin[0] = 1;
+	 end[0] = T.griddimension[0] - 2;
+	 begin[1] = T.griddimension[1] - 1;
+	 end[1] = T.griddimension[1] - 1;
+	 MultiIndexType Offset;
+	 Offset[0] = 0;
+	 Offset[1] = -1;
+	 T.SetGridFunction(begin, end, TO, false, SimIO.para.deltaX);
+	 T.ScaleGridFunction(begin, end, 2.0);
+	 T.AddToGridFunction(begin, end, -1.0, T, Offset);*/
 
 }
 void Computation::setBoundaryTN(GridFunction& T, RealType (*TO)(RealType),

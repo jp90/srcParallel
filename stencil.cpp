@@ -62,6 +62,56 @@ int count=0;
 	}
 
 }
+void Stencil::ApplyStencilOperatorU(const MultiIndexType& gridreadbegin, const MultiIndexType& gridreadend,
+		                           const MultiIndexType& gridwritebegin, const MultiIndexType& gridwriteend,
+		                           GridFunction& sourcegridfunction, GridFunction& imagegridfunction,IO& SimIO){
+	int a =int((stencilwidth-1)/2);
+int count=0;
+	for(int i=gridwritebegin[0];i<=gridwriteend[0];i++){
+		for(int j=gridwritebegin[1];j<=gridwriteend[1];j++){
+			if ((SimIO.geometry_field[i][j]>15) && (SimIO.geometry_field[i+1][j]>15)){
+			RealType sum = 0.0;
+			for(int k=0;k<stencilwidth;k++){
+				for(int l=0;l<stencilwidth;l++){
+					//sum += sourcegridfunction.getVridfunction()[i-k-int((stencilwidth-1)/2)]
+					//                                           [j-l-int((stencilwidth-1)/2)]*stencil[k][l];
+					sum += sourcegridfunction.getGridFunction()[i+k-a][j+l-a]*stencil[k][l];
+				}
+			}
+          if(abs) {
+        	  if(sum<0.0)sum=-1.0*(sum);
+          }
+		imagegridfunction.getGridFunction()[i][j] = sum;
+			}
+	}
+	}
+
+}
+void Stencil::ApplyStencilOperatorV(const MultiIndexType& gridreadbegin, const MultiIndexType& gridreadend,
+		                           const MultiIndexType& gridwritebegin, const MultiIndexType& gridwriteend,
+		                           GridFunction& sourcegridfunction, GridFunction& imagegridfunction,IO& SimIO){
+	int a =int((stencilwidth-1)/2);
+int count=0;
+	for(int i=gridwritebegin[0];i<=gridwriteend[0];i++){
+		for(int j=gridwritebegin[1];j<=gridwriteend[1];j++){
+			if ((SimIO.geometry_field[i][j]>15) && (SimIO.geometry_field[i][j+1]>15)){
+			RealType sum = 0.0;
+			for(int k=0;k<stencilwidth;k++){
+				for(int l=0;l<stencilwidth;l++){
+					//sum += sourcegridfunction.getVridfunction()[i-k-int((stencilwidth-1)/2)]
+					//                                           [j-l-int((stencilwidth-1)/2)]*stencil[k][l];
+					sum += sourcegridfunction.getGridFunction()[i+k-a][j+l-a]*stencil[k][l];
+				}
+			}
+          if(abs) {
+        	  if(sum<0.0)sum=-1.0*(sum);
+          }
+		imagegridfunction.getGridFunction()[i][j] = sum;
+			}
+	}
+	}
+
+}
 void Stencil::setUxStencil(){
 	abs=false;
 	stencil[0][1]=-1.0/h[0];

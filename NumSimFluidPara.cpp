@@ -18,10 +18,10 @@
 #include "communication.h"
 using namespace std;
 
-RealType const_zero(RealType c){
+RealType const_zero(RealType c) {
 	return 0.0;
 }
-RealType const_one(RealType c){
+RealType const_one(RealType c) {
 	return 1.0;
 }
 int main() {
@@ -31,16 +31,19 @@ int main() {
 	RealType (*TL)(RealType);
 	RealType (*TR)(RealType);
 
-		TO=&const_zero;
-		TU=&const_zero;
-		TL=&const_one;
-		TR=&const_zero;
+	TO = &const_zero;
+	TU = &const_zero;
+	TL = &const_one;
+	TR = &const_zero;
 
 	int s = 1;
 
 	char input[] = "./srcParallel/inputvals.txt";
 	char output[] = "./srcParallel/inputvals.txt";
 	IO SimIO(input, output);
+	char geometry_path[] ="./srcParallel/wirbel_geometrie.csv";
+	SimIO.readGeometry(geometry_path);
+
 
 	IndexType n = 0;
 	RealType time = 0.0;
@@ -99,14 +102,16 @@ int main() {
 	Solver solve(SimIO);
 
 	PointType delta;
-	//computer.setBoundaryU(u);
-	//p.Grid_Print();
+
+	//u.Grid_Print();
+	//return 9;
 	delta[0] = SimIO.para.deltaX;
 	delta[1] = SimIO.para.deltaY;
 	//Start Main Loop
 
-	computer.setBoundaryTD(t, TO,TU,TL,TR);
-	computer.setBoundaryTN(t,TO,TU,TL,TR);
+	computer.setBoundaryTD(t, TO, TU, TL, TR);
+	computer.setBoundaryTN(t, TO, TU, TL, TR);
+	computer.setBoundaryU(u);
 	computer.setBoundaryV(v);
 //	if(world_rank==0){sleep(s);}
 	cout << world_rank << ": nach boundary" << endl;
@@ -119,14 +124,12 @@ int main() {
 
 	int count = 0;
 
-
-
 	while ((time < SimIO.para.tEnd)) {
 		SimIO.writeVTKMasterfile(global_grid, u.getGridFunction(),
 				v.getGridFunction(), p.getGridFunction(), delta, n);
 		SimIO.writeVTKSlavefile(global_grid, u.getGridFunction(),
-				v.getGridFunction(), p.getGridFunction(), t.getGridFunction(), h.getGridFunction(),
-				delta, world_rank, n, n);
+				v.getGridFunction(), p.getGridFunction(), t.getGridFunction(),
+				h.getGridFunction(), delta, world_rank, n, n);
 
 		// compute timestep size deltaT
 		RealType uMax = u.MaxValueGridFunction(begin, end);
@@ -136,7 +139,7 @@ int main() {
 		double deltaTmin;
 
 		MPI_Reduce(&deltaT, &deltaTmin, 1, MPI_DOUBLE, MPI_MIN, 0,
-				MPI_COMM_WORLD);
+		MPI_COMM_WORLD);
 		MPI_Bcast(&deltaTmin, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 		//	if(world_rank==1){sleep(s);}
 		//		cout << world_rank <<": bevor boundary" << endl;
@@ -149,28 +152,27 @@ int main() {
 		//					p.Grid_Print();
 
 		computer.ComputeTemperature(t, u, v, deltaT);
-		computer.setBoundaryTD(t, TO,TU,TL,TR);
-		computer.setBoundaryTN(t,TO,TU,TL,TR);
+	    computer.setBoundaryTD(t, TO, TU, TL, TR);
+		computer.setBoundaryTN(t, TO, TU, TL, TR);
 		communication.ExchangeTValues(t);
 		computer.ComputeHeatfunction(h, t, u, deltaT);
-/*
-		if(world_rank==1){sleep(s);}
-		cout << world_rank << ": U" << endl;
-		u.Grid_Print();
+		/*
+		 if(world_rank==1){sleep(s);}
+		 cout << world_rank << ": U" << endl;
+		 u.Grid_Print();
 
-		if(world_rank==1){sleep(s);}
-		cout << world_rank << ": V" << endl;
-		v.Grid_Print();
+		 if(world_rank==1){sleep(s);}
+		 cout << world_rank << ": V" << endl;
+		 v.Grid_Print();
 
-		if(world_rank==1){sleep(s);}
-		cout << world_rank << ": P" << endl;
-		p.Grid_Print();
+		 if(world_rank==1){sleep(s);}
+		 cout << world_rank << ": P" << endl;
+		 p.Grid_Print();
 
-		if(world_rank==1){sleep(s);}
-		cout << world_rank << ": T" << endl;
-		t.Grid_Print();
-		*/
-
+		 if(world_rank==1){sleep(s);}
+		 cout << world_rank << ": T" << endl;
+		 t.Grid_Print();
+		 */
 
 		// Compute F and G
 		computer.computeMomentumEquations(f, g, u, v, t, deltaTmin);
@@ -225,7 +227,7 @@ int main() {
 			Residuum_local = solve.computeResidual(p, rhs);
 
 			MPI_Reduce(&Residuum_local, &Residuum, 1, MPI_DOUBLE, MPI_SUM, 0,
-					MPI_COMM_WORLD);
+			MPI_COMM_WORLD);
 			MPI_Bcast(&Residuum, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 			if (world_rank == 0) {
 				cout << "Current Residuum: ";
@@ -234,8 +236,8 @@ int main() {
 			}
 			it++;
 		}
-		if (Residuum > 10.0)
-			return 0;
+		//if (Residuum > 10.0)
+		//	return 0;
 
 		// Update velocites u and v
 		computer.computeNewVelocities(u, v, f, g, p, deltaTmin);

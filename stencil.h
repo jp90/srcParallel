@@ -10,7 +10,7 @@
 
 #include "gridfunction.h"
 #include "typedef.h"
-
+#include "IO.hpp"
 class Stencil {
 public:
 	Stencil(int stencilwidth, const PointType& h);
@@ -21,6 +21,18 @@ public:
 			const MultiIndexType& gridwritebegin,
 			const MultiIndexType& gridwriteend,
 			GridFunction& sourcegridFunction, GridFunction& imagegridFunction);
+	void ApplyStencilOperatorU(const MultiIndexType& gridreadbegin,
+			const MultiIndexType& gridreadend,
+			const MultiIndexType& gridwritebegin,
+			const MultiIndexType& gridwriteend,
+			GridFunction& sourcegridfunction, GridFunction& imagegridfunction,
+			IO& SimIO);
+	void ApplyStencilOperatorV(const MultiIndexType& gridreadbegin,
+			const MultiIndexType& gridreadend,
+			const MultiIndexType& gridwritebegin,
+			const MultiIndexType& gridwriteend,
+			GridFunction& sourcegridfunction, GridFunction& imagegridfunction,
+			IO& SimIO);
 
 	void setUxStencil();
 	void setUyStencil();

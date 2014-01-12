@@ -8,11 +8,47 @@ using namespace std;
 IO::IO(char *input, char *output) {
 	this->output = output;
 	readInputfile(input);
+
+	geometry_field = new unsigned int*[para.iMax + 2];
+	for (int i = 0; i < para.iMax + 2; i++) {
+		geometry_field[i] = new unsigned int[para.jMax + 2];
+	}
+	// Initialize grid values to zero
+	for (int i = 0; i < para.iMax + 2; i++) {
+		for (int j = 0; j < para.jMax + 2; j++) {
+			geometry_field[i][j] = 0;
+		}
+	}
 }
 IO::~IO() {
-
+	//for (int i = 0; i < para.iMax + 2; i++)
+		//delete[] geometry_field[i];
+	//delete[] geometry_field;
 }
 
+void IO::readGeometry(char *filename) {
+	ifstream file(filename);
+	string value;
+	para.nfc = 0;
+	if (file.good()) {
+		for (int j = 0; j < para.jMax + 2; j++) {
+			for (int i = 0; i < para.iMax + 2; i++) {
+
+				if (i == para.iMax + 2 - 1)
+					getline(file, value, '\n');
+				else
+					getline(file, value, ','); // read a string until next comma: http://www.cplusplus.com/reference/string/getline/
+
+				unsigned int entry = atoi(value.c_str());
+				geometry_field[i][j] = entry;
+				if (entry > 15)
+					para.nfc++;
+				cout << geometry_field[i][j] << " ";
+			}
+			cout << endl;
+		}
+	}
+}
 void IO::readInputfile(char *filename) {
 	string line;
 
@@ -45,9 +81,12 @@ void IO::readInputfile(char *filename) {
 	para.TU = 0.0;
 	para.TL = 0.0;
 	para.TR = 0.0;
+	para.WL = 1;
+	para.WR = 1;
+	para.WO = 1;
+	para.WU = 1;
 
 	ifstream infile(filename);
-
 	while (getline(infile, line)) {
 		// Read values from inputvals.txt
 		int pos_equ = line.find("=");
@@ -109,6 +148,15 @@ void IO::readInputfile(char *filename) {
 			para.TL = atof(after_equ.c_str());
 		if (!before_equ.compare("TR"))
 			para.TR = atof(after_equ.c_str());
+		if (!before_equ.compare("WL"))
+			para.WL = atof(after_equ.c_str());
+		if (!before_equ.compare("WR"))
+			para.WR = atof(after_equ.c_str());
+		if (!before_equ.compare("WO"))
+			para.WO = atof(after_equ.c_str());
+		if (!before_equ.compare("WU"))
+			para.WU = atof(after_equ.c_str());
+
 	}
 
 }
@@ -350,8 +398,8 @@ void IO::writeVTKMasterfile(const MultiIndexType & griddimension,
 
 void IO::writeVTKSlavefile(const MultiIndexType & griddimension,
 		GridFunctionType u, GridFunctionType v, GridFunctionType p,
-		GridFunctionType t, GridFunctionType h, const PointType & delta, int world_rank, int d,
-		int step) {
+		GridFunctionType t, GridFunctionType h, const PointType & delta,
+		int world_rank, int d, int step) {
 
 	IndexType iMax = griddimension[0];
 	IndexType jMax = griddimension[1];
@@ -465,15 +513,15 @@ void IO::writeVTKSlavefile(const MultiIndexType & griddimension,
 
 	os << "</DataArray>" << std::endl
 			<< "<DataArray type=\"Float64\" Name=\"h\" format=\"ascii\">"
-						<< std::endl;
-				for (int i = 0; i < localgriddimension[1] - 1; ++i) {
-					for (int j = 0; j < localgriddimension[0] - 1; ++j) {
-						os << std::scientific << h[j][i] << " ";
-					}
-					os << std::endl;
-				}
+			<< std::endl;
+	for (int i = 0; i < localgriddimension[1] - 1; ++i) {
+		for (int j = 0; j < localgriddimension[0] - 1; ++j) {
+			os << std::scientific << h[j][i] << " ";
+		}
+		os << std::endl;
+	}
 
-				os << "</DataArray>" << std::endl
+	os << "</DataArray>" << std::endl
 			<< "<DataArray Name=\"field\" NumberOfComponents=\"3\" type=\"Float64\" >"
 			<< std::endl;
 	for (int i = 0; i < localgriddimension[1] - 1; ++i) {

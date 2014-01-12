@@ -69,42 +69,45 @@ public:
 	 * Sets the boundary values for p.
 	 * @param p pressure
 	 */
-void setBoundaryP(GridFunction& p);
-/*! \brief Sets the boundary values for f.
- *
- * Sets the boundary values for f.
- * @param f
- */
+	void setBoundaryP(GridFunction& p);
+	/*! \brief Sets the boundary values for f.
+	 *
+	 * Sets the boundary values for f.
+	 * @param f
+	 */
 
-void setBoundaryF(GridFunction& f, GridFunction& u);
-/*! \brief Sets the boundary values for g.
- *
- * Sets the boundary values for g.
- * @param g
- */
+	void setBoundaryF(GridFunction& f, GridFunction& u);
+	/*! \brief Sets the boundary values for g.
+	 *
+	 * Sets the boundary values for g.
+	 * @param g
+	 */
 
-void setBoundaryG(GridFunction& g, GridFunction& v);
-/*! \brief Computes the right hands side (rhs) of the pressure equation.
- *
- * Computes the right hands side (rhs) of the pressure equation.
- * @param rhs value of right hand side
- * @param f
- * @param g
- * @param deltaT time step size
- */
+	void setBoundaryG(GridFunction& g, GridFunction& v);
+	/*! \brief Computes the right hands side (rhs) of the pressure equation.
+	 *
+	 * Computes the right hands side (rhs) of the pressure equation.
+	 * @param rhs value of right hand side
+	 * @param f
+	 * @param g
+	 * @param deltaT time step size
+	 */
 
-void computeRighthandSide(GridFunction& rhs, GridFunction& f, GridFunction& g,RealType deltaT);
+	void computeRighthandSide(GridFunction& rhs, GridFunction& f,
+			GridFunction& g, RealType deltaT);
 
 	IO SimIO;
 
-void ComputeTemperature(GridFunction& T, GridFunction& u, GridFunction& v, RealType deltaT);
-void ComputeHeatfunction(GridFunction& h, GridFunction& t, GridFunction& u, RealType deltaT);
-void setBoundaryTD(GridFunction& T, RealType (*TO)(RealType),
-		RealType (*TU)(RealType), RealType (*TL)(RealType),
-		RealType (*TR)(RealType) );
-void setBoundaryTN( GridFunction& T, RealType (*TO)(RealType),
-		RealType (*TU)(RealType), RealType (*TL)(RealType),
-		RealType (*TR)(RealType) );
+	void ComputeTemperature(GridFunction& T, GridFunction& u, GridFunction& v,
+			RealType deltaT);
+	void ComputeHeatfunction(GridFunction& h, GridFunction& t, GridFunction& u,
+			RealType deltaT);
+	void setBoundaryTD(GridFunction& T, RealType (*TO)(RealType),
+			RealType (*TU)(RealType), RealType (*TL)(RealType),
+			RealType (*TR)(RealType));
+	void setBoundaryTN(GridFunction& T, RealType (*TO)(RealType),
+			RealType (*TU)(RealType), RealType (*TL)(RealType),
+			RealType (*TR)(RealType));
 
 };
 
