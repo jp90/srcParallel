@@ -59,7 +59,7 @@ void Computation::computeNewVelocities(GridFunction& u, GridFunction& v,
 	delta[1] = SimIO.para.deltaY;
 	Px(branch_1, p, delta);
 	f.AddToGridFunction(begin, end, -1.0 * deltaT, branch_1);
-	u.SetGridFunction(begin, end, 1.0, f);
+	u.SetGridFunctionFluidU(begin, end, 1.0, f,SimIO.geometry_field);
 	// v Update
 	begin[0] = 1;
 	end[0] = v.griddimension[0] - 2;
@@ -68,7 +68,7 @@ void Computation::computeNewVelocities(GridFunction& u, GridFunction& v,
 	GridFunction branch_2(p.griddimension);
 	Py(branch_2, p, delta);
 	g.AddToGridFunction(begin, end, -1.0 * deltaT, branch_2);
-	v.SetGridFunction(begin, end, 1.0, g);
+	v.SetGridFunctionFluidV(begin, end, 1.0, g, SimIO.geometry_field);
 
 }
 ;

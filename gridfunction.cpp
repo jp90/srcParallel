@@ -164,7 +164,7 @@ void GridFunction::SetGridFunction(const MultiIndexType& begin,
 
 void GridFunction::SetGridFunctionFluidU(const MultiIndexType& begin,
 		const MultiIndexType& end, RealType factor,
-		GridFunction& sourcegridfunction) {
+		GridFunction& sourcegridfunction, unsigned int** geometry_field) {
 	if (begin[0] < 0) {
 		cout << "Invalid Index";
 	}
@@ -179,14 +179,36 @@ void GridFunction::SetGridFunctionFluidU(const MultiIndexType& begin,
 	}
 	for (int i = begin[0]; i <= end[0]; i++) {
 		for (int j = begin[1]; j <= end[1]; j++) {
-	//geometry_field zugriff?
-			//		if ((para.geometry_field[i][j] != 8) && (geometry_field[i][j] != 9) && (geometry_field[i][j] != 10))
-		gridfunction[i][j] = factor
+			if ((geometry_field[i][j]>16) && (geometry_field[i+1][j]>16))
+			gridfunction[i][j] = factor
 				* sourcegridfunction.getGridFunction()[i][j];
 		}
 	}
 }
+void GridFunction::SetGridFunctionFluidV(const MultiIndexType& begin,
+		const MultiIndexType& end, RealType factor,
+		GridFunction& sourcegridfunction, unsigned int** geometry_field) {
+	if (begin[0] < 0) {
+		cout << "Invalid Index";
+	}
+	if (end[0] > griddimension[0]) {
+		cout << "Invalid Index";
+	}
+	if (begin[1] < 0) {
+		cout << "Invalid Index";
+	}
+	if (end[1] > griddimension[1]) {
+		cout << "Invalid Index";
+	}
+	for (int i = begin[0]; i <= end[0]; i++) {
+		for (int j = begin[1]; j <= end[1]; j++) {
 
+			if ((geometry_field[i][j]>16) && (geometry_field[i][j+1]>16))
+			gridfunction[i][j] = factor
+				* sourcegridfunction.getGridFunction()[i][j];
+		}
+	}
+}
 void GridFunction::SetGridFunction(const MultiIndexType& begin,
 		const MultiIndexType& end, RealType factor,
 		GridFunction& sourcegridfunction, MultiIndexType& offset) {

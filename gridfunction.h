@@ -55,10 +55,10 @@ public:
 
 	void SetGridFunctionFluidU(const MultiIndexType& begin,
 			const MultiIndexType& end, RealType factor,
-			GridFunction& sourcegridfunction);
+			GridFunction& sourcegridfunction, unsigned int** geometry_field);
 	void SetGridFunctionFluidV(const MultiIndexType& begin,
 				const MultiIndexType& end, RealType factor,
-				GridFunction& sourcegridfunction);
+				GridFunction& sourcegridfunction, unsigned int** geometry_field);
 	/*! \brief Sets entries to a certain value
 	 *
 	 *  Takes the entries in a certain domain of the Gridfunction and multiplies them with a given factor.
