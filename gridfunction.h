@@ -21,6 +21,7 @@ public:
 	 *  @param dimX grid dimension in x-direction
 	 *  @param dimY grid dimension in y-direction
 	 */
+
 	GridFunction(int dimX, int dimY);
 
 	/*! \brief Allocates a grid
@@ -52,6 +53,12 @@ public:
 	void SetGridFunction(const MultiIndexType& begin, const MultiIndexType& end,
 			RealType value);
 
+	void SetGridFunctionFluidU(const MultiIndexType& begin,
+			const MultiIndexType& end, RealType factor,
+			GridFunction& sourcegridfunction);
+	void SetGridFunctionFluidV(const MultiIndexType& begin,
+				const MultiIndexType& end, RealType factor,
+				GridFunction& sourcegridfunction);
 	/*! \brief Sets entries to a certain value
 	 *
 	 *  Takes the entries in a certain domain of the Gridfunction and multiplies them with a given factor.

@@ -155,6 +155,7 @@ void Computation::computeMomentumEquations(GridFunction& f, GridFunction& g,
 }
 
 void Computation::setBoundaryU(GridFunction& u) {
+
 	for (int i = 1; i < u.griddimension[0] - 2; i++) {
 		for (int j = 1; j < u.griddimension[1] - 2; j++) {
 			switch (SimIO.geometry_field[i][j]) {
@@ -196,7 +197,7 @@ void Computation::setBoundaryU(GridFunction& u) {
 				break;
 				//hindernis, O Fluid
 			case 8:
-				u.getGridFunction()[i - 1][j] = 0.0;
+				u.getGridFunction()[i][j] = 0.0;
 				break;
 				//hindernis, NO Fluid
 			case 9:
@@ -518,7 +519,7 @@ void Computation::setBoundaryP(GridFunction& p) {
 						* (SimIO.para.deltaX * SimIO.para.deltaX
 								* p.getGridFunction()[i][j + 1]
 								+ SimIO.para.deltaY * SimIO.para.deltaY
-										* p.getGridFunction()[i - 1][j]);
+										* p.getGridFunction()[i + 1][j]);
 				break;
 				//hindernis, SW Fluid
 			case 6:
@@ -528,7 +529,7 @@ void Computation::setBoundaryP(GridFunction& p) {
 						* (SimIO.para.deltaX * SimIO.para.deltaX
 								* p.getGridFunction()[i][j - 1]
 								+ SimIO.para.deltaY * SimIO.para.deltaY
-										* p.getGridFunction()[i - 1][j]);
+										* p.getGridFunction()[i + 1][j]);
 				break;
 			case 7:
 				cout << "Forbidden geometry, sucker!";
@@ -545,7 +546,7 @@ void Computation::setBoundaryP(GridFunction& p) {
 						* (SimIO.para.deltaX * SimIO.para.deltaX
 								* p.getGridFunction()[i][j + 1]
 								+ SimIO.para.deltaY * SimIO.para.deltaY
-										* p.getGridFunction()[i + 1][j]);
+										* p.getGridFunction()[i - 1][j]);
 				break;
 				//hindernis, SO Fluid
 			case 10:
@@ -555,7 +556,7 @@ void Computation::setBoundaryP(GridFunction& p) {
 						* (SimIO.para.deltaX * SimIO.para.deltaX
 								* p.getGridFunction()[i][j - 1]
 								+ SimIO.para.deltaY * SimIO.para.deltaY
-										* p.getGridFunction()[i + 1][j]);
+										* p.getGridFunction()[i - 1][j]);
 				break;
 
 			case 11:

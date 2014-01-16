@@ -40,14 +40,24 @@ void IO::readGeometry(char *filename) {
 					getline(file, value, ','); // read a string until next comma: http://www.cplusplus.com/reference/string/getline/
 
 				unsigned int entry = atoi(value.c_str());
-				geometry_field[i][j] = entry;
+				geometry_field[i][para.jMax+1-j] = entry;
 				if (entry > 15)
 					para.nfc++;
-				cout << geometry_field[i][j] << " ";
+	//			cout << geometry_field[i][para.jMax+1-j] << " ";
 			}
-			cout << endl;
+		//	cout << endl;
 		}
 	}
+if (para.world_rank == 1) {
+	for (int j = 0; j < para.jMax + 2; j++) {
+		for (int i = 0; i < (para.iMax + 2)/2; i++) {
+			geometry_field[i][j]=geometry_field[(para.iMax)/2+1+i][j];
+			cout << geometry_field[i][j] << " ";
+
+		}
+		cout << endl;
+	}
+}
 }
 void IO::readInputfile(char *filename) {
 	string line;
@@ -342,7 +352,7 @@ void IO::writeVTKMasterfile(const MultiIndexType & griddimension,
 	char numstr[21];
 	sprintf(numstr, "%d", step);
 	std::string filename;
-	filename.append("./");
+	filename.append("./plots/");
 	filename.append("field_");
 	filename.append(numstr);
 	filename.append(".pvtr");
@@ -421,7 +431,7 @@ void IO::writeVTKSlavefile(const MultiIndexType & griddimension,
 	char my_rank[2];
 	sprintf(my_rank, "%d", world_rank);
 	std::string filename;
-	filename.append("./");
+	filename.append("./plots/");
 	filename.append("solution_processor_");
 	filename.append(my_rank);
 	filename.append("_");

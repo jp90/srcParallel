@@ -13,7 +13,6 @@
 #include "computation.h"
 #include "solver.h"
 #include <mpi.h>
-
 #include <unistd.h>
 #include "communication.h"
 using namespace std;
@@ -36,14 +35,9 @@ int main() {
 	TL = &const_one;
 	TR = &const_zero;
 
-	int s = 1;
-
 	char input[] = "./srcParallel/inputvals.txt";
 	char output[] = "./srcParallel/inputvals.txt";
 	IO SimIO(input, output);
-	char geometry_path[] ="./srcParallel/wirbel_geometrie.csv";
-	SimIO.readGeometry(geometry_path);
-
 
 	IndexType n = 0;
 	RealType time = 0.0;
@@ -55,10 +49,13 @@ int main() {
 	MultiIndexType global_grid;
 	global_grid[0] = SimIO.para.iMax + 2;
 	global_grid[1] = SimIO.para.jMax + 2;
+	SimIO.para.world_rank = world_rank;
+
+	char geometry_path[] = "./srcParallel/wirbel_geometrie.csv";
+	SimIO.readGeometry(geometry_path);
 
 	//PARA:
 	SimIO.para.iMax = SimIO.para.iMax / 2;
-	SimIO.para.world_rank = world_rank;
 
 	//initialize u,v,p
 	MultiIndexType begin, end;
@@ -103,22 +100,20 @@ int main() {
 
 	PointType delta;
 
-	//u.Grid_Print();
-	//return 9;
 	delta[0] = SimIO.para.deltaX;
 	delta[1] = SimIO.para.deltaY;
-	//Start Main Loop
 
+	//Start Main Loop
 	computer.setBoundaryTD(t, TO, TU, TL, TR);
 	computer.setBoundaryTN(t, TO, TU, TL, TR);
 	computer.setBoundaryU(u);
 	computer.setBoundaryV(v);
 //	if(world_rank==0){sleep(s);}
-	cout << world_rank << ": nach boundary" << endl;
-	p.Grid_Print();
+//	cout << world_rank << ": nach boundary" << endl;
+	//p.Grid_Print();
 //	if(world_rank==1){sleep(s);}
-	cout << world_rank << ": nach boundary" << endl;
-	p.Grid_Print();
+	//cout << world_rank << ": nach boundary" << endl;
+//	p.Grid_Print();
 
 	Communication communication(world_rank);
 
@@ -152,7 +147,7 @@ int main() {
 		//					p.Grid_Print();
 
 		computer.ComputeTemperature(t, u, v, deltaT);
-	    computer.setBoundaryTD(t, TO, TU, TL, TR);
+		computer.setBoundaryTD(t, TO, TU, TL, TR);
 		computer.setBoundaryTN(t, TO, TU, TL, TR);
 		communication.ExchangeTValues(t);
 		computer.ComputeHeatfunction(h, t, u, deltaT);
