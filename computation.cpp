@@ -267,14 +267,12 @@ void Computation::setBoundaryU(GridFunction& u) {
 			u.SetGridFunction(begin, end, 0.0);
 		} else if (SimIO.para.WR == 2) {
 			u.SetGridFunction(begin, end, 0.0);
-
 		} else if (SimIO.para.WR == 3) {
 			MultiIndexType Offset;
 			Offset[0] = -1;
 			Offset[1] = 0;
 			u.SetGridFunction(begin, end, 1.0, Offset);
 		}
-
 	}
 	// u_i,0
 	begin[0] = 1;
@@ -455,7 +453,7 @@ void Computation::setBoundaryV(GridFunction& v) {
 			MultiIndexType Offset;
 			Offset[0] = 1;
 			Offset[1] = 0;
-			v.SetGridFunction(begin, end, -1.0, Offset);
+			v.SetGridFunction(begin, end, 1.0, Offset);
 		} else if (SimIO.para.WL == 4) {
 			MultiIndexType Offset;
 			Offset[0] = 1;
